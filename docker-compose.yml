@@ -1,0 +1,55 @@
+
+services:
+# ----------------------
+# Contenedor Laravel
+# ----------------------
+
+  api:
+    build:
+      context: ./backend/laravel-api/
+      dockerfile: Dockerfile
+    container_name: laravel-api
+    user: "${UID}:${GID}"
+    volumes:
+      - ./backend/laravel-api:/var/www/html
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+# ----------------------
+# Contenedor Vue
+# ----------------------
+  frontend:
+    build:
+      context: frontend/vue-SPA/
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/vue-SPA:/app        # tu código local
+      - /app/node_modules              # node_modules dentro del contenedor
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - api
+
+# ----------------------
+# Contenedor PostgreSQL
+# ----------------------
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+
+volumes:
+  pgdata:
+    external: false
