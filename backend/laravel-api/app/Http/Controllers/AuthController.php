@@ -36,8 +36,9 @@ class AuthController extends Controller
             ], 401);
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
-        /** @var \Laravel\Sanctum\NewAccessToken $token */
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return (new UserResource($user))
@@ -50,6 +51,7 @@ class AuthController extends Controller
 
     public function logout()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $user->currentAccessToken()->delete();

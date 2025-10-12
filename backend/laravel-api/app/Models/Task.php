@@ -22,6 +22,7 @@ class Task extends Model
         'state_id',
         'category_id',
         'title',
+        'priority',
         'description',
         'metadata',
         'due_date',

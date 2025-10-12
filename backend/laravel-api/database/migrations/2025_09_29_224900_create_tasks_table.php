@@ -16,8 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('state_id');
             $table->unsignedBigInteger('category_id');
-            $table->text('title');
-            $table->string('description')->nullable();
+            $table->string('title');
+            $table->enum('priority', ['alta', 'media', 'baja'])->default('media');
+            $table->text('description')->nullable();
             $table->jsonb('metadata')->nullable();
             $table->date('due_date')->nullable();
             $table->timestamps();
