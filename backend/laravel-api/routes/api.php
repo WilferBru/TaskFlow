@@ -39,5 +39,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas Task
     // --------------------------------
 
+    Route::get('/tasks/filter', [TaskController::class, 'filter']);
     Route::apiResource('/tasks', TaskController::class);
 });

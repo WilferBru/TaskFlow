@@ -47,4 +47,34 @@ class Task extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id_category');
     }
+
+    // Filtro por categoria
+    public function scopeCategory($query, $categoryId)
+    {
+        if ($categoryId) {
+            return $query->where('category_id', $categoryId);
+        }
+
+        return $query;
+    }
+
+    // Filtro por estado
+    public function scopeState($query, $stateId)
+    {
+        if ($stateId) {
+            return $query->where('state_id', $stateId);
+        }
+
+        return $query;
+    }
+
+    // Busqueda por palabra clave (title o descripción)
+    public function scopeSearch($query, $keyword)
+    {
+        if ($keyword) {
+            return $query->whereAny(['title', 'description'], 'like', "%{$keyword}%");
+        }
+
+        return $query;
+    }
 }

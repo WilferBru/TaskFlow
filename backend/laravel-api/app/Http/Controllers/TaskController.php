@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FilterTaskRequest;
 use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
@@ -23,6 +24,47 @@ class TaskController extends Controller
                 'status'  => true,
                 'message' => 'Tareas obtenidas correctamente',
             ]);
+    }
+
+    public function filter(FilterTaskRequest $filterTaskRequest)
+    {
+        try {
+
+            /** @var \App\Models\User */
+            $user = Auth::user();
+
+            $tasks = $user->tasks()->with(['category', 'stateTask'])
+                ->category($filterTaskRequest->category_id)
+                ->state($filterTaskRequest->state_id)
+                ->search($filterTaskRequest->keyword)
+                ->get();
+
+            if ($tasks->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No se encontraron tareas con esos filtros.',
+                ], 404);
+            }
+
+            return TaskResource::collection($tasks)
+                ->additional([
+                    'status'  => true,
+                    'message' => 'Tareas obtenidas',
+                ])->response()
+                ->setStatusCode(200);
+        } catch (\Throwable $e) {
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'No se pudo hacer la tarea.',
+                'error'   => [
+                    'type' => get_class($e),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            ], 500);
+        }
     }
 
     public function store(TaskRequest $taskRequest)
@@ -82,7 +124,10 @@ class TaskController extends Controller
     {
         try {
 
-            $task = Task::findOrFail($id);
+            /** @var \App\Model\User  */
+            $user = Auth::user();
+
+            $task = $user->tasks()->findOrFail($id);
 
             $task->update($taskRequest->validated());
 
@@ -106,7 +151,10 @@ class TaskController extends Controller
     {
         try {
 
-            $task = Task::findOrFail($id);
+            /** @var \App\Model\User  */
+            $user = Auth::user();
+
+            $task = $user->tasks()->findOrFail($id);
 
             $task->delete();
 
