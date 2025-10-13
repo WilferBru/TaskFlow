@@ -44,13 +44,17 @@ Crea tu archivo .env basado en .env.example y configura la conexión a la base d
 
 dentro de la carpeta TaskFlow ejecutar:
 
+```bash
 docker compose up -d --build
+```
 
 4. **Ejecuta migraciones**
 
 dentro de carpeta TaskFlow ejecutar:
 
+```bash
 docker compose exec api php artisan migrate --seed
+```
 
 5. **Puede acceder a al app**
 
