@@ -1,7 +1,7 @@
-# TaskFlow Desarrollo (rama dev)
+# TaskFlow en Desarrollo (rama dev)
 
 TaskFlow es una aplicación de gestión de tareas construida con **Laravel 12** como backend y **Vue.js** como frontend.  
-La idea principal de este proyecto es poner a prueba los conocimientos; la idea final es desarrollarla, documentarla y subirla a la nube.
+La idea principal de este proyecto es poner a prueba los conocimientos; la idea final es desarrollarla, documentarla y subirla a la nube. De momento esta en fase de desarrollo por lo que se recomienda usar la rama dev.
 
 ---
 
@@ -36,6 +36,20 @@ git clone https://github.com/WilferBru/TaskFlow.git
 cd TaskFlow
 ```
 
+Tenga en cuenta que al clonar el repositorio debe listar las ramas de este mismo y seleccionar la rama donde va
+a trabajar. La rama main contiene la versión estable y lista para producción, mientras que la rama dev
+es para desarrollo y pruebas.
+
+```bash
+git branch -r
+```
+
+y seleccionar la rama en la que quiere trabajar(dev o main)
+
+```bash
+git switch dev
+```
+
 2. **Editar .env**
 
 Crea tu archivo .env basado en .env.example y configura la conexión a la base de datos (~/TaskFlow/backend/laravel-api/.env).
@@ -61,8 +75,10 @@ docker compose exec api php artisan migrate --seed
 Puedes acceder a la app y probar la api, por defecto crea un seeder de usuario admin
 con los datos
 
-'email' => 'prueba@prueba.com',
-'password' => 'prueba123'
+```bash
+email: prueba@prueba.com
+password: prueba123
+```
 
 Pero tambien puede loguearse como usuario en register
 
