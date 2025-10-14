@@ -80,7 +80,7 @@ email: prueba@prueba.com
 password: prueba123
 ```
 
-Pero tambien puede loguearse como usuario en register
+Pero tambien puede registrarse como usuario en register
 
 ---
 
