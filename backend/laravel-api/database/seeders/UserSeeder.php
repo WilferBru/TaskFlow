@@ -14,7 +14,8 @@ class UserSeeder extends Seeder
         User::create([
             'name'     => 'Suj Prueba',
             'email'    => 'prueba@prueba.com',
-            'password' => 'prueba123'
+            'password' => 'prueba123',
+            'role'     => 'admin'
         ]);
     }
 }
