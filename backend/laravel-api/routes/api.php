@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\StateTaskController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/profile', fn() => Auth::user()); //datos del user autenticado
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // ruta de usuarios
+    Route::apiResource('/users', UserController::class);
 
     // -------------------------------
     // Rutas de StateTask
