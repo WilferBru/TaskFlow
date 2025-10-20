@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 class CategoryController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }
+
     public function index()
     {
         return response()->json(Category::orderBy('id_category', 'asc')->get());
@@ -31,9 +36,9 @@ class CategoryController extends Controller
         //
     }
 
-    public function update(CategoryRequest $categoryRequest, $id)
+    public function update(CategoryRequest $categoryRequest, Category $category)
     {
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
 
         $category->update($categoryRequest->validated());
 
@@ -44,9 +49,9 @@ class CategoryController extends Controller
             ]);
     }
 
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
+        // $category = Category::findOrFail($id);
 
         $category->delete();
 
