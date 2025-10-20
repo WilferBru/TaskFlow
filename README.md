@@ -16,6 +16,7 @@ La idea principal de este proyecto es poner a prueba los conocimientos; la idea 
 - Manejo de herramientas de Laravel como **Request**, **Resource**, **Scope** y rutas **API**
 - Implementacion de policy para permisos y manejos de rol y acciones para separar la logica solo
   para el controaldor user
+- Implementar policy para los controladores StateTask y Category
 
 ---
 
