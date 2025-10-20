@@ -17,7 +17,7 @@ class UserPolicy
     public function view(User $user, User $model): bool
     {
         // Elsuuario solo puede ver sus datos pero admin puede verlos todos
-        return $user->id === $model->id || $user->role === 'admin';
+        return $user->id_user === $model->id_user || $user->role === 'admin';
     }
 
     public function create(User $user): bool
@@ -28,13 +28,13 @@ class UserPolicy
     public function update(User $user, User $model): bool
     {
         // Admin puede editar a cualquiera, usuario solo puede editar su perfil
-        return $user->role === 'admin' || $user->id === $model->id;
+        return $user->role === 'admin' || $user->id_user === $model->id_user;
     }
 
     public function delete(User $user, User $model): bool
     {
         // Solo admin puede eliminar
-        return $user->role === 'admin';
+        return $user->role === 'admin' && $user->id_user !== $model->id_user;
     }
 
     public function restore(User $user, User $model): bool
