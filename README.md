@@ -14,6 +14,8 @@ La idea principal de este proyecto es poner a prueba los conocimientos; la idea 
   - Estado
   - Palabra clave en título o descripción
 - Manejo de herramientas de Laravel como **Request**, **Resource**, **Scope** y rutas **API**
+- Implementacion de policy para permisos y manejos de rol y acciones para separar la logica solo
+  para el controaldor user
 
 ---
 
