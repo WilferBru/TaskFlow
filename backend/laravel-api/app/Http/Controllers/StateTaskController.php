@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 class StateTaskController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->authorizeResource(StateTask::class, 'state');
+    }
+
     public function index()
     {
         return response()->json(StateTask::orderBy('id_state', 'asc')->get());
@@ -31,25 +36,25 @@ class StateTaskController extends Controller
         //
     }
 
-    public function update(StateTaskRequest $stateRequest, $id)
+    public function update(StateTaskRequest $stateRequest, StateTask $state)
     {
-        $stateTask = StateTask::findOrFail($id);
+        // $state = StateTask::findOrFail($id);
 
-        $stateTask->update($stateRequest->validated());
+        $state->update($stateRequest->validated());
 
 
-        return (new StateTaskResource($stateTask))
+        return (new StateTaskResource($state))
             ->additional([
                 'status'  => true,
                 'message' => 'Estado actualizado correctamente',
             ]);
     }
 
-    public function destroy(String $id)
+    public function destroy(StateTask $state)
     {
-        $stateTask = StateTask::findOrFail($id);
+        // $stateTask = StateTask::findOrFail($id);
 
-        $stateTask->delete();
+        $state->delete();
 
         return response()->json([
             'status'  => true,
