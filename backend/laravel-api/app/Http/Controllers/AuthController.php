@@ -18,10 +18,13 @@ class AuthController extends Controller
         // Crear usuario
         $user = User::create($userRequest->validated()); // aqui simplificamos y editamso como request
 
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return (new UserResource($user))
             ->additional([
                 'status'  => true,
                 'message' => 'Usuario agregado correctamente',
+                'token' => $token,
             ]);
     }
 
