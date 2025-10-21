@@ -36,7 +36,7 @@ class UserController extends Controller
                 JsonResponse::HTTP_OK // 200
             );
         } catch (\Throwable $e) {
-            return ApiResponse::error(
+            return apiResponse::error(
                 'Error al obtener los usuarios.',
                 $e,
                 JsonResponse::HTTP_BAD_REQUEST // 400
