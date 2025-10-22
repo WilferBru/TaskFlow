@@ -18,6 +18,7 @@ Este backend fue desarrollado con **Laravel 12** y funciona como la base de dato
 -   **Base de datos:** PostgresSQL
 -   **Contenedores:** Docker Compose
 -   **PHP:** 8.2-fpm
+-   **Puerto:** 8000
 
 ## Autenticación
 
@@ -80,3 +81,7 @@ La API usa laravel Sanctum para manejar el inicio de sesion y la proteccion de r
     email: prueba@prueba.com
     password: prueba123
     ```
+
+### La api estara disponible en
+
+[localhost:8000](http://localhost:8000/)
