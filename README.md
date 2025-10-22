@@ -84,6 +84,16 @@ email: prueba@prueba.com
 password: prueba123
 ```
 
+```bash
+# frontend
+http://localhost:5173/
+```
+
+```bash
+# backend
+http://localhost:8000/api
+```
+
 Pero tambien puede registrarse como usuario en register
 
 ---
@@ -92,7 +102,7 @@ Pero tambien puede registrarse como usuario en register
 
 Toda la información sobre los endpoints, autenticación y roles de usuario se encuentra en el archivo:
 
-[backend/README.md](./backend/README.md)
+[backend/laravel-api/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/backend/laravel-api/README.md)
 
 Ahí encontrarás:
 
@@ -107,7 +117,7 @@ Ahí encontrarás:
 
 Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
-[frontend/README.md](./frontend/README.md)
+[frontend/vue-SPA/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/frontend/vue-SPA/README.md)
 
 ---
 
@@ -129,4 +139,4 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
 Wilfer Bru
 Desarrollador Laravel + Vue.js
-[Linkedin](www.linkedin.com/in/wilfer-jose-bru-torres-455b7220b)
+[Linkedin](https://www.linkedin.com/in/wilfer-jose-bru-torres-455b7220b)
