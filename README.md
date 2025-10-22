@@ -84,17 +84,30 @@ email: prueba@prueba.com
 password: prueba123
 ```
 
-```bash
-# frontend
-http://localhost:5173/
-```
-
-```bash
-# backend
-http://localhost:8000/api
-```
-
 Pero tambien puede registrarse como usuario en register
+
+---
+
+## Documentación de la API (Backend)
+
+Toda la información sobre los endpoints, autenticación y roles de usuario se encuentra en el archivo:
+
+[backend/README.md](./backend/README.md)
+
+Ahí encontrarás:
+
+- Cómo registrar y autenticar usuarios
+- Qué rutas están disponibles
+- Qué permisos tiene cada rol (admin y user)
+- Ejemplos de peticiones y respuestas JSON
+
+---
+
+## Documentación del Frontend
+
+Para conocer cómo configurar y ejecutar la parte del frontend, visita:
+
+[frontend/README.md](./frontend/README.md)
 
 ---
 
@@ -109,3 +122,11 @@ Pero tambien puede registrarse como usuario en register
 - Implementar Github Actions
 
 - Desplegar en AWS
+
+---
+
+👨‍💻 Autor
+
+Wilfer Bru
+Desarrollador Laravel + Vue.js
+[Linkedin](www.linkedin.com/in/wilfer-jose-bru-torres-455b7220b)
