@@ -7,55 +7,76 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## API de TaskFlow (Backend Laravel)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Este backend fue desarrollado con **Laravel 12** y funciona como la base de datos y lógica de negocio de la aplicación **TaskFlow**, un sistema de gestión de tareas con autenticación, roles y control de permisos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tecnologías principales
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Framework:** Laravel 12
+-   **Autenticación:** Laravel Sanctum
+-   **Base de datos:** PostgresSQL
+-   **Contenedores:** Docker Compose
+-   **PHP:** 8.2-fpm
 
-## Learning Laravel
+## Autenticación
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+La API usa laravel Sanctum para manejar el inicio de sesion y la proteccion de rutas con tokens personales.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Endpoints de autenticación**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Método | Ruta            | Descripción                                               | Autenticación |
+| ------ | --------------- | --------------------------------------------------------- | ------------- |
+| `POST` | `/api/register` | Registra un nuevo usuario                                 | No requerida  |
+| `POST` | `/api/login`    | Inicia sesión y devuelve un token                         | No requerida  |
+| `POST` | `/api/logout`   | Cierra sesión (invalida el token)                         | Requerida     |
+| `GET`  | `/api/profile`  | Obtener datos del usuario autenticado (invalida el token) | Requerida     |
 
-## Laravel Sponsors
+## Usuarios (/api/users)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Método   | Ruta                | Descripción                    | Rol        |
+| -------- | ------------------- | ------------------------------ | ---------- |
+| `GET`    | `/api/users`        | Listar los usuarios            | admin      |
+| `POST`   | `/api/users`        | Crear un uevo suario           | admin      |
+| `GET`    | `/api/users/{user}` | Muestra detalles de un usuario | admin/user |
+| `PUT`    | `/api/users/{user}` | Actualizar usuario             | admin/user |
+| `DELETE` | `/api/users/{user}` | Eliminar usuario o cuenta      | admin/user |
 
-### Premium Partners
+## Estado de tareas (/api/states)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Método   | Ruta                  | Descripción                  | Rol   |
+| -------- | --------------------- | ---------------------------- | ----- |
+| `GET`    | `/api/states`         | Listar los estados de task   | admin |
+| `POST`   | `/api/states`         | Crear un estado de task      | admin |
+| `PUT`    | `/api/states/{state}` | Actualizar un estado de task | admin |
+| `DELETE` | `/api/states/{state}` | Eliminar un estado de task   | admin |
 
-## Contributing
+## Categorias (/api/categories)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| Método   | Ruta                         | Descripción                      | Rol   |
+| -------- | ---------------------------- | -------------------------------- | ----- |
+| `GET`    | `/api/categories`            | Listar las categorias de task    | admin |
+| `POST`   | `/api/categories`            | Crear una categoria de task      | admin |
+| `PUT`    | `/api/categories/{category}` | Actualizar una categoria de task | admin |
+| `DELETE` | `/api/categories/{category}` | Eliminar una categoria de task   | admin |
 
-## Code of Conduct
+## Tareas (/api/tasks)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Método   | Ruta                | Descripción                                  | Rol        |
+| -------- | ------------------- | -------------------------------------------- | ---------- |
+| `GET`    | `/api/tasks`        | Listar las tareas                            | admin/user |
+| `GET`    | `/api/tasks/{task}` | Mostrar detalles de unas tarea               | admin/user |
+| `GET`    | `/api/tasks/filter` | Buscar tareas por titulo, estado o categoria | admin/user |
+| `POST`   | `/api/tasks`        | Crear una tarea                              | admin/user |
+| `PUT`    | `/api/tasks/{task}` | Actualizar una tarea                         | admin/user |
+| `DELETE` | `/api/tasks/{task}` | Eliminar una tarea                           | admin/user |
 
-## Security Vulnerabilities
+## Observaciones
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   Todas las rutas protegidas requieren el envío del **token Bearer** obtenido al iniciar sesión.
+-   Para las rutas `POST` y `PUT`, los campos deben enviarse en formato **JSON** dentro del body, puede guiarse por los campos de las tablas en la base de datos.
+-   El proyecto incluye **seeders** que crean un usuario administrador por defecto:
+    ```bash
+    email: prueba@prueba.com
+    password: prueba123
+    ```
