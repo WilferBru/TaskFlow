@@ -84,13 +84,21 @@ email: prueba@prueba.com
 password: prueba123
 ```
 
+```bash
+# frontend
+http://localhost:5173/
+```
+
+```bash
+# backend
+http://localhost:8000/api
+```
+
 Pero tambien puede registrarse como usuario en register
 
 ---
 
 ## Próximos pasos
-
-- Implementar Roles y permisos para usuarios.
 
 - Mejorar la interfaz de Vue.js para mostrar tareas y filtros.
 
