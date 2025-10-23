@@ -1,4 +1,3 @@
-
 # Imagen base de node
 FROM node:20-alpine
 
