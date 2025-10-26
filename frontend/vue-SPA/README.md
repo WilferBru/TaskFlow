@@ -42,4 +42,4 @@ docker compose up -d --build
 
 ### Url del frontend disponible en
 
-[localhost:5173](http://localhost/)
+[localhost/](http://localhost/)

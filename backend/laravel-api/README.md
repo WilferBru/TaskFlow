@@ -84,4 +84,4 @@ La API usa laravel Sanctum para manejar el inicio de sesion y la proteccion de r
 
 ### La api estara disponible en
 
-[localhost:8000](http://localhost/api/)
+[localhost/api](http://localhost/api/)
