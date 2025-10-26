@@ -19,7 +19,7 @@ Actualmente se encuentra **en desarrollo activo**, integrando la API construida 
 - **Estilos:** TailwindCSS
 - **Backend:** Laravel 12 (API REST)
 - **Contenedores:** Docker + Docker Compose
-- **Puerto:** 5173
+- **Puerto expuesto:** 5173
 
 ## Estado actual
 
@@ -42,4 +42,4 @@ docker compose up -d --build
 
 ### Url del frontend disponible en
 
-[localhost:5173](http://localhost:5173/)
+[localhost:5173](http://localhost/)

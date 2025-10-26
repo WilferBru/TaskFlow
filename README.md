@@ -28,6 +28,10 @@ La idea principal de este proyecto es poner a prueba los conocimientos; la idea 
 - **Base de datos:** PostgreSQL (detalle de conexión en `docker-compose.yml`)
 - **Autenticación:** Laravel Sanctum
 - **Host:** Docker Compose
+- **Nginx:** servidor web y reverse proxy integrado en Docker Compose
+  - Rutas `/api` → contenedor Laravel
+  - Resto de rutas `/` → contenedor Vue
+  - Acceso a toda la app desde `http://localhost`
 
 ---
 
@@ -86,12 +90,12 @@ password: prueba123
 
 ```bash
 # frontend
-http://localhost:5173/
+http://localhost/
 ```
 
 ```bash
 # backend
-http://localhost:8000/api
+http://localhost/api/
 ```
 
 Pero tambien puede registrarse como usuario en register
