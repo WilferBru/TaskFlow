@@ -6,6 +6,10 @@ import HomeView from "@/views/HomeView.vue";
 import TasksView from "@/views/TasksView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
+// Auth
+import LoginView from '@/views/Auth/LoginView.vue';
+import RegisterView from '@/views/Auth/RegisterView.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -28,7 +32,19 @@ const router = createRouter({
           name: 'profile',
           component: ProfileView,
         }
-      ]
+      ],    
+    },
+
+    // Auth
+    {
+      path: '/Login',
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: '/Registrarse',
+      name: 'register',
+      component: RegisterView,
     }
   ],
 })
