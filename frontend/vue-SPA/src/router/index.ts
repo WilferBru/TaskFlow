@@ -20,33 +20,40 @@ const router = createRouter({
         {
           path: '',
           name: 'home',
-          component: HomeView
+          component: HomeView,
+          meta: { requiresAuth: true },
         },
         {
-          path: 'Tareas',
+          path: 'tareas',
           name: 'task',
-          component: TasksView
+          component: TasksView,
+          meta: { requiresAuth: true },
         },
         {
-          path: 'Perfil',
+          path: 'perfil',
           name: 'profile',
           component: ProfileView,
+          meta: { requiresAuth: true },
         }
       ],    
     },
 
     // Auth
     {
-      path: '/Login',
+      path: '/login',
       name: "login",
       component: LoginView,
+      meta: { requiresGuest: true },
     },
     {
-      path: '/Registrarse',
+      path: '/registrarse',
       name: 'register',
       component: RegisterView,
+      meta: { requiresGuest: true },
     }
   ],
 })
+
+
 
 export default router

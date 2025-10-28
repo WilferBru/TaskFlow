@@ -12,7 +12,7 @@
                 Bienvenido, Wilfer 👋
             </h1>
             <button
-            class="bg-blue-700 text-white px-4 py-4 rounded hover:bg-blue-700 transition"
+              class="bg-blue-700 text-white px-4 py-4 rounded hover:bg-blue-700 transition"
             >
                 Cerrar sesión
             </button>
@@ -36,6 +36,6 @@
 import SidebarAdmin from '@/components/layout/SidebarAdmin.vue';
 import SidebarAll from '@/components/layout/SidebarAll.vue';
 
-const currentYear = new Date().getFullYear();
-// const role = ref("admin")
+const currentYear = new Date().getFullYear(); // Año para el footer
 </script>
+
