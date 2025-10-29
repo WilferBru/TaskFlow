@@ -54,6 +54,20 @@ const router = createRouter({
   ],
 })
 
+// middleware global para proteger rutas
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem("token");
 
+  // Si no esta logueado y la ruta requeire auth -> redirige al login
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({ name: "login" });
+  }
+  // si esta loguado y quiere ir a login o registre, sera redirigido a home
+  else if (to.meta.requiresGuest && isAuthenticated) {
+    next({ name: "home" });
+  }else {
+    next(); // puede seguir
+  }
+});
 
 export default router
