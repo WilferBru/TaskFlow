@@ -24,9 +24,9 @@ Actualmente se encuentra **en desarrollo activo**, integrando la API construida 
 ## Estado actual
 
 - Configuración inicial de Vue + TypeScript
-- Integración con API Laravel mediante Axios (pendiente)
+- Autenticacion mediante axios y pinia
 - Módulos planeados:
-  - Autenticación (login / registro / token)
+  - Autenticación (login / registro / token) -> Echo ✅
   - Panel de tareas
   - Filtros por estado y categoría
   - Gestión de usuarios y roles
@@ -42,4 +42,4 @@ docker compose up -d --build
 
 ### Url del frontend disponible en
 
-[localhost/](http://localhost/)
+[localhost:5173/](http://localhost:5173/)

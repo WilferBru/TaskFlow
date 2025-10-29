@@ -28,10 +28,6 @@ La idea principal de este proyecto es poner a prueba los conocimientos; la idea 
 - **Base de datos:** PostgreSQL (detalle de conexión en `docker-compose.yml`)
 - **Autenticación:** Laravel Sanctum
 - **Host:** Docker Compose
-- **Nginx:** servidor web y reverse proxy integrado en Docker Compose
-  - Rutas `/api` → contenedor Laravel
-  - Resto de rutas `/` → contenedor Vue
-  - Acceso a toda la app desde `http://localhost`
 
 ---
 
@@ -90,12 +86,12 @@ password: prueba123
 
 ```bash
 # frontend
-http://localhost/
+http://localhost:5173/
 ```
 
 ```bash
 # backend
-http://localhost/api/
+http://localhost:8000/api/
 ```
 
 Pero tambien puede registrarse como usuario en register
@@ -131,7 +127,9 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
 - Añadir pruebas unitarias y de integración.
 
-- Subir la imagen de produccion a Dockerhub
+- Subir la imagen de produccion a Dockerhub.
+
+- Implementar Nginx en las imagens build
 
 - Implementar Github Actions
 
