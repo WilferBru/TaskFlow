@@ -14,8 +14,22 @@ const app = createApp(App);
 
 app.config.devtools = true;  // <--- activa Devtools
 
-app.use(createPinia());
+// Primero registramos Pinia
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
 app.use(Toast);
 
-app.mount('#app');
+// app.mount('#app');
+
+import { useAuthStore } from './stores/authStore';
+const authStore = useAuthStore();
+
+const initApp = async () => {
+    if (authStore.token) {
+        await authStore.fetchUser();
+    }
+    app.mount('#app');
+};
+
+initApp();
