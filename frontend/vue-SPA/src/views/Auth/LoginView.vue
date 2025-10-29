@@ -8,11 +8,11 @@
                 <h3 class="block mt-4 text-2xl text-gray-900 text-center font-bold">
                     TaskFlow
                 </h3>
-                <form  class="mt-10">
+                <form @submit.prevent="handleLogin" class="mt-10">
                                     
                     <div>
                         <input
-                            
+                            v-model="email"
                             type="email" 
                             placeholder="Correo electronico" 
                             class="mt-1 pl-6 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
@@ -21,7 +21,7 @@
         
                     <div class="mt-7">                
                         <input
-                            
+                            v-model="password"
                             type="password" 
                             placeholder="Contraseña" 
                             class="mt-1 pl-5 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
@@ -29,7 +29,9 @@
                     </div>
         
                     <div class="mt-7">
-                        <button class="bg-cyan-600 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                        <button
+                            type="submit" 
+                            class="bg-cyan-600 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
                             Acceder
                         </button>
                     </div>
@@ -61,6 +63,37 @@
 </template>
 
 <script setup lang="ts">
-//
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/authStore';
+import { useToast } from "vue-toastification";
+
+const router = useRouter();
+const authStore = useAuthStore();
+const toast = useToast();
+
+// var reactivas
+const email = ref("");
+const password = ref("");
+
+const handleLogin = async () => {
+    if (!email.value || !password.value) {
+        toast.error("Por favor completa todos los campos");
+        return;
+    }
+    try {
+        const response = await authStore.login(email.value, password.value);
+
+        if (authStore.token) {
+            console.log("✅ Inicio de sesión exitoso:", response);
+            toast.success("Bienvenido");
+            router.push({ name: "home" });
+        }
+    } catch (error) {
+        toast.error(`Error al iniciar sesión: ${authStore.error}`);
+        console.error("❌ Error al iniciar sesión:", authStore.error);
+
+    }
+};
 
 </script>

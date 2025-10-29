@@ -12,6 +12,7 @@
                 Bienvenido, Wilfer 👋
             </h1>
             <button
+            @click="handleLogout"
               class="bg-blue-700 text-white px-4 py-4 rounded hover:bg-blue-700 transition"
             >
                 Cerrar sesión
@@ -35,7 +36,30 @@
 // import { ref } from 'vue';
 import SidebarAdmin from '@/components/layout/SidebarAdmin.vue';
 import SidebarAll from '@/components/layout/SidebarAll.vue';
+import { useAuthStore } from '@/stores/authStore';
+import { useRouter } from 'vue-router';
+import { useToast } from "vue-toastification";
 
 const currentYear = new Date().getFullYear(); // Año para el footer
+const authStore = useAuthStore();
+const router = useRouter();
+const toast = useToast();
+
+const handleLogout = async () => {
+  try {
+    const response = await authStore.logout();
+
+    if (response.code === 200) {
+      toast.success("Sesión cerrada correctamente");
+      router.push({ name: "login" });
+    }else {
+      toast.warning(`No se pudo cerrar sesión correctamente. Código: ${response.code}`);
+    }
+  } catch (error: any) {
+    toast.error(`Error cerrando sesión. Código: ${error.response?.status || "500"}`);
+    console.error("Error logout:", error);
+  }
+}
+
 </script>
 
