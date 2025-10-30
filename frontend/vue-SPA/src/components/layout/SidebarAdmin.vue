@@ -42,9 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import HomeIcon from '../icons/HomeIcon.vue';
-import TaskIcon from '../icons/TaskIcon.vue';
-import UsersIcon from '../icons/UsersIcon.vue';
-import UserIcon from '../icons/UserIcon.vue';
+import HomeIcon from '../common/icons/HomeIcon.vue';
+import TaskIcon from '../common/icons/TaskIcon.vue';
+import UsersIcon from '../common/icons/UsersIcon.vue';
+import UserIcon from '../common/icons/UserIcon.vue';
+
 
 </script>
