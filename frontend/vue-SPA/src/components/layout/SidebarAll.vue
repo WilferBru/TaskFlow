@@ -9,7 +9,7 @@
         </RouterLink>
 
         <RouterLink
-          :to="{ name: 'home' }"
+          :to="{ name: 'create_task' }"
           class="dark:bg-black px-4 py-2 rounded-3xl text-gray-50 hover:bg-gray-600 hover:text-shadow-gray-600"
         >
           Crear Tarea

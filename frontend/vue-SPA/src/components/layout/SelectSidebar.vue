@@ -3,7 +3,7 @@
     
     <button
       @click="toggleDropdown"
-      class="flex items-center justify-between w-full p-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+      class="flex items-center justify-between w-full p-3 bg-white text-black border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
       :aria-expanded="isOpen"
       aria-haspopup="listbox"
     >
@@ -34,7 +34,7 @@
         <ul class="py-1">
           <li v-for="user in users" :key="user.id"
               @click="selectUser(user)"
-              class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-indigo-50 transition duration-150 ease-in-out"
+              class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-indigo-50 text-blue-700 transition duration-150 ease-in-out"
               :class="{ 'bg-indigo-50 text-indigo-600 font-medium': user.id === selectedUser.id }"
               role="option"
               :aria-selected="user.id === selectedUser.id"

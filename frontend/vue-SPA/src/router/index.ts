@@ -3,7 +3,10 @@ import MainLayout from '@/layouts/MainLayout.vue';
 
 // Vistas
 import HomeView from "@/views/HomeView.vue";
-import TasksView from "@/views/TasksView.vue";
+//tareas
+import TasksView from "@/views/Task/TasksView.vue";
+import CreareTaskView from '@/views/Task/CreareTaskView.vue';
+//user
 import ProfileView from "@/views/ProfileView.vue";
 
 // Auth
@@ -27,6 +30,12 @@ const router = createRouter({
           path: 'tareas',
           name: 'task',
           component: TasksView,
+          meta: { requiresAuth: true },
+        },
+        {
+          path: 'crear-tareas',
+          name: 'create_task',
+          component: CreareTaskView,
           meta: { requiresAuth: true },
         },
         {
