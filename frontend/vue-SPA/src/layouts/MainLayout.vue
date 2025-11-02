@@ -49,7 +49,7 @@ const toast = useToast();
 
 // ciclo de vida del componene
 onMounted(async () => {
-  const user = await authStore.fetchUser();
+  // const user = await authStore.fetchUser();
 });
 
 // cerrar sesion

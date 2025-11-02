@@ -20,6 +20,7 @@
         </RouterLink>
         
         <RouterLink
+          v-if="userStore.user?.role === 'admin'"
           :to="{ name: '' }"
           class="flex flex-col items-center px-3 py-3 rounded text-gray-300 hover:bg-gray-600"
           :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === '' }"
@@ -28,6 +29,27 @@
             <p class="text-xs mt-2">Usuarios</p>
         </RouterLink>
         
+        <RouterLink
+          v-if="userStore.user?.role === 'admin'"
+          :to="{ name: 'categories' }"
+          class="flex flex-col items-center px-3 py-3 rounded text-gray-300 hover:bg-gray-600"
+          :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === 'categories' }"
+        >
+            <TagIcon />
+            <p class="text-xs mt-2">Categorias</p>
+        </RouterLink>
+        
+        <RouterLink
+          v-if="userStore.user?.role === 'admin'"
+          :to="{ name: 'state-tasks' }"
+          class="flex flex-col items-center px-3 py-3 rounded text-gray-300 hover:bg-gray-600"
+          :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === 'state-tasks' }"
+        >
+            <ListTask />
+            <p class="text-xs mt-2">Estado Tareas</p>
+        </RouterLink>
+        
+        <!-- Mi cuenta -->
         <RouterLink
           :to="{ name: 'profile' }"
           class="mt-auto flex flex-col items-center rounded text-gray-300 hover:bg-gray-600"
@@ -46,6 +68,11 @@ import HomeIcon from '../common/icons/HomeIcon.vue';
 import TaskIcon from '../common/icons/TaskIcon.vue';
 import UsersIcon from '../common/icons/UsersIcon.vue';
 import UserIcon from '../common/icons/UserIcon.vue';
+import TagIcon from '../common/icons/TagIcon.vue';
+import { useAuthStore } from '@/stores/authStore';
+import ListTask from '../common/icons/listTask.vue';
+
+const userStore = useAuthStore();
 
 
 </script>

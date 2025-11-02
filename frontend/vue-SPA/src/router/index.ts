@@ -13,6 +13,14 @@ import ProfileView from "@/views/ProfileView.vue";
 import LoginView from '@/views/Auth/LoginView.vue';
 import RegisterView from '@/views/Auth/RegisterView.vue';
 
+/**
+ * Admin
+ */
+// categories
+import CategoriesView from '@/views/admin/category/CategoriesView.vue';
+// state tasks
+import StateTasks from '@/views/admin/stateTask/StateTasks.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -45,6 +53,29 @@ const router = createRouter({
           meta: { requiresAuth: true },
         }
       ],    
+    },
+
+    // admin
+    {
+      path: '/admin/',
+      component: MainLayout,
+      children: [
+        // Categorias
+        {
+          path: 'categorias',
+          name: 'categories',
+          component: CategoriesView,
+          meta: { requiresAuth: true },
+        },
+
+        // State tasks
+        {
+          path: 'estados-tareas',
+          name: 'state-tasks',
+          component: StateTasks,
+          meta: { requiresAuth: true },
+        },
+      ]
     },
 
     // Auth

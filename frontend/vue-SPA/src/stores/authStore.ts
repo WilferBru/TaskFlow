@@ -5,6 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
+  role: string;
   created_at?: string;
 }
 
@@ -17,7 +18,7 @@ interface AuthState {
 
 export const useAuthStore = defineStore("auth", {
     state: (): AuthState => ({
-        user: null,
+        user: JSON.parse(localStorage.getItem("user") || "null"),
         token: localStorage.getItem("token"),
         loading: false,
         error: null,
@@ -33,6 +34,9 @@ export const useAuthStore = defineStore("auth", {
                 this.user = response.data;
                 if (this.token) {
                     localStorage.setItem("token", this.token);
+                }
+                if (this.user) {
+                    localStorage.setItem("user", JSON.stringify(this.user));
                 }
                 return response;
             } catch (error: any) {
@@ -54,6 +58,9 @@ export const useAuthStore = defineStore("auth", {
                 if (this.token) {
                     localStorage.setItem("token", this.token);
                 }
+                if (this.user) {
+                    localStorage.setItem("user", JSON.stringify(this.user));
+                }
                 return response;
             } catch (error: any) {
                 this.error = error.response?.data?.message || "Error al registrar en authstore";
@@ -68,6 +75,10 @@ export const useAuthStore = defineStore("auth", {
             try {
                 const response = await authService.getUser();
                 this.user = response;
+                if (this.user) {
+                    localStorage.setItem("user", JSON.stringify(this.user));
+                }
+                return response;
             } catch (error) {
                 console.error("Error al obtener usuario:", error);
             }
@@ -83,6 +94,7 @@ export const useAuthStore = defineStore("auth", {
                     this.user = null;
                     this.token = null;
                     localStorage.removeItem("token");
+                    localStorage.removeItem("user");
                 }else {
                     console.error("⚠️ El backend respondió pero no confirmó el cierre:", response);
                 }
