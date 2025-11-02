@@ -85,14 +85,11 @@ const handleLogin = async () => {
         const response = await authStore.login(email.value, password.value);
 
         if (authStore.token) {
-            console.log("✅ Inicio de sesión exitoso:", response);
             toast.success("Bienvenido");
             router.push({ name: "home" });
         }
     } catch (error) {
         toast.error(`Error al iniciar sesión: ${authStore.error}`);
-        console.error("❌ Error al iniciar sesión:", authStore.error);
-
     }
 };
 

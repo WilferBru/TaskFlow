@@ -83,7 +83,6 @@ export const useAuthStore = defineStore("auth", {
                     this.user = null;
                     this.token = null;
                     localStorage.removeItem("token");
-                    console.log("✅ Sesión cerrada correctamente");
                 }else {
                     console.error("⚠️ El backend respondió pero no confirmó el cierre:", response);
                 }

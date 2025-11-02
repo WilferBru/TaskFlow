@@ -65,7 +65,6 @@ const handleLogout = async () => {
     }
   } catch (error: any) {
     toast.error(`Error cerrando sesión. Código: ${error.response?.status || "500"}`);
-    console.error("Error logout:", error);
   }
 }
 
