@@ -98,7 +98,7 @@
 
                                 <td class="text-sm whitespace-nowrap">
                                     <button 
-                                        class="btn bg-gray-200 text-black hover:bg-blue-300 hover:text-gray-50" 
+                                        class="btn bg-gray-200 text-black" 
                                         :popovertarget="`popover-${cat.id_category}`" 
                                         :style="`anchor-name:--anchor-${cat.id_category}`">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -119,13 +119,18 @@
                                             </router-link>
                                         </li>
                                         <li>
-                                            <router-link 
-                                                to=""
-                                                class="flex items-center text-red-500 justify-center w-10 h-10 rounded-full hover:bg-red-500 hover:text-gray-100 transition"
+                                            <button 
+                                                class="flex items-center text-red-500 justify-center w-10 h-10 rounded-full hover:bg-red-500 hover:text-gray-100 transition" 
+                                                @click="ModalDeleteCategory(`${cat.id_category}`)"
                                             >
                                                 <DeleteIcon />
-                                            </router-link>
+                                            </button>
                                         </li>
+                                        <DeleteCategoryModal 
+                                            :modal-id="`${cat.id_category}`"
+                                            :category="`${cat.category}`"
+                                            @category-delete="deleteCategory"
+                                        />
                                     </ul>
                                 </td>
                             </tr>
@@ -169,11 +174,11 @@
 <script setup lang="ts">
 import EditIcon from '@/components/common/icons/EditIcon.vue';
 import DeleteIcon from '@/components/common/icons/DeleteIcon.vue';
-import ShowIcon from '@/components/common/icons/ShowIcon.vue';
 import categoryService from '@/services/categoryService';
 import { onMounted, ref } from 'vue';
 import CreateCategoryModel from '@/components/category/createCategoryModel.vue';
 import { useToast } from "vue-toastification";
+import DeleteCategoryModal from '@/components/category/deleteCategoryModal.vue';
 
 const toast = useToast();
 
@@ -194,13 +199,33 @@ onMounted(async () => {
 const saveCategory = async (category: string) => {
     try {
         const response = await categoryService.create({category});
-        toast.success("Tarea creada correctamente");
+        toast.success("Categoria creada correctamente");
         // actualizar lista
         categories.value.push(response.data);
         return response;
     } catch (error) {
-        console.error("❌ Error creando tarea:", error);
+        console.error("❌ Error creando la categoria:", error);
     }
 };
+
+const ModalDeleteCategory = (id_category: string) => {
+  const modal = document.getElementById(id_category) as HTMLDialogElement | null;
+  if (modal) {
+    modal.showModal();
+  } else {
+    console.warn(`⚠️ No se encontró el modal con id ${id_category}`);
+  }
+};
+
+const deleteCategory = async (id_category: string) => {
+    try {
+        const response = await categoryService.delete(id_category);
+        toast.success("Categoria eliminada correctamente");
+        categories.value = await categoryService.getAll();
+        return response;
+    } catch (error) {
+        console.error("❌ Error eliminando al categoria:", error);
+    }
+}
 
 </script>

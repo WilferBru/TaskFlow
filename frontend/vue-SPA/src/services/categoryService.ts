@@ -23,6 +23,16 @@ export default {
             console.log("Error al crear la categoria", error.response?.data || error.message);
             throw error;
         }   
+    },
+    
+    async delete(id_category: string) {
+        try {
+            const response = await api.delete(`/categories/${id_category}`);
+            return response.data;
+        } catch (error: any) {
+            console.log("Error al crear la categoria", error.response?.data || error.message);
+            throw error;
+        }   
     }
 }
 
