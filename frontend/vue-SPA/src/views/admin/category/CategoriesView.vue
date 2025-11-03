@@ -28,13 +28,8 @@
                 <span>Import</span>
             </button>
 
-            <button class="flex items-center justify-center w-1/2 px-5 py-2 text-sm tracking-wide text-white transition-colors duration-200 bg-blue-500 rounded-lg shrink-0 sm:w-auto gap-x-2 hover:bg-blue-600 dark:hover:bg-blue-500 dark:bg-blue-600">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <CreateCategoryModel @input-category="saveCategory"/>
 
-                <span>Add vendor</span>
-            </button>
         </div>
     </div>
 
@@ -97,27 +92,24 @@
                                 </td>
                                 <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                                     <div class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                                        {{ cat.created_at }}
+                                        {{ new Date(cat.created_at).toLocaleDateString() }}
                                     </div>
                                 </td>
 
                                 <td class="text-sm whitespace-nowrap">
-                                    <button class="btn bg-gray-200 text-black" popovertarget="popover-1" style="anchor-name:--anchor-1">
+                                    <button 
+                                        class="btn bg-gray-200 text-black hover:bg-blue-300 hover:text-gray-50" 
+                                        :popovertarget="`popover-${cat.id_category}`" 
+                                        :style="`anchor-name:--anchor-${cat.id_category}`">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                                         </svg>
                                     </button>
                                     <ul 
                                         class="dropdown menu w-15 rounded-box bg-gray-200 text-black shadow-sm"
-                                        popover id="popover-1" style="position-anchor:--anchor-1">
-                                        <li>
-                                            <router-link 
-                                                to=""
-                                                class="flex items-center text-emerald-500 justify-center w-10 h-10 rounded-full hover:bg-emerald-500 hover:text-gray-100 transition"
-                                            >
-                                                <ShowIcon />
-                                            </router-link>
-                                        </li>
+                                        popover 
+                                        :id="`popover-${cat.id_category}`" 
+                                        :style="`position-anchor:--anchor-${cat.id_category}`">
                                         <li>
                                             <router-link 
                                                 to=""
@@ -180,6 +172,10 @@ import DeleteIcon from '@/components/common/icons/DeleteIcon.vue';
 import ShowIcon from '@/components/common/icons/ShowIcon.vue';
 import categoryService from '@/services/categoryService';
 import { onMounted, ref } from 'vue';
+import CreateCategoryModel from '@/components/category/createCategoryModel.vue';
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 const categories = ref<{ 
     id_category: string, 
@@ -194,5 +190,17 @@ onMounted(async () => {
        console.error("Error cargando categorías:", error); 
     }
 });
+
+const saveCategory = async (category: string) => {
+    try {
+        const response = await categoryService.create({category});
+        toast.success("Tarea creada correctamente");
+        // actualizar lista
+        categories.value.push(response.data);
+        return response;
+    } catch (error) {
+        console.error("❌ Error creando tarea:", error);
+    }
+};
 
 </script>

@@ -9,11 +9,12 @@
     <div class="flex-1 flex flex-col min-h-screen">
       <!-- Header -->
         <header class="bg-gray-900 shadow p-4 flex justify-between items-center">
-            <h1 class="text-lg font-semibold text-gray-200">
+            <h1 
+                class="text-lg font-semibold text-gray-200">
                 Bienvenido, {{ authStore.user?.name }} 👋
             </h1>
             <button
-            @click="handleLogout"
+              @click="handleLogout"
               class="bg-blue-700 text-white px-4 py-4 rounded hover:bg-blue-700 transition"
             >
                 Cerrar sesión
