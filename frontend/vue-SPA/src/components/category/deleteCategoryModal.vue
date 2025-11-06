@@ -4,7 +4,7 @@
         <div class="modal-box">
             <h3 class="text-lg font-mono text-gray-200">¿Quieres eliminar la categoria: <b class="text-red-300">{{ category }}</b>?</h3>
             <div class="modal-action">
-            <form>
+            <form class="flex justify-between w-full">
                 <button 
                     type="button"
                     class="btn bg-gray-300 text-gray-700 hover:bg-gray-400"
