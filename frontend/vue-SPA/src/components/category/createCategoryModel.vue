@@ -13,6 +13,7 @@
                 type="text" 
                 class="input bg-gray-300 
                 text-gray-800" 
+                :class="borderInput"
                 placeholder="Nombre de la categoria" 
             />
         </fieldset>
@@ -44,6 +45,7 @@
 import { ref, watch } from 'vue';
 
 const categoryName = ref("");
+const borderInput = ref("");
 
 const props = defineProps<{
   id_category?: number;
@@ -66,14 +68,19 @@ const emit = defineEmits<{
 
 // funcion que emite el valor al al padre para crear o actualizar una categoria
 const emitCategory = () => {
-    if (!categoryName.value.trim()) return;
+    if (!categoryName.value.trim()) {
+      borderInput.value = "border-3 border-red-500 p-2 rounded-md";
+      return
+    };
 
     if (props.id_category) {
       // si existe id_category -> actualizar
       emit('inputCategory', { id_category: props.id_category, category: categoryName.value });
+      borderInput.value = "";
     } else {
       // si no existe -> crear
       emit('inputCategory', { category: categoryName.value });
+      borderInput.value = "";
     }    
     closeModal();
 }
@@ -81,6 +88,10 @@ const emitCategory = () => {
 const closeModal = () => {
   const modal = document.getElementById('createCategory') as HTMLDialogElement;
   modal?.close();
-  categoryName.value = ''; // limpiar campo
+  // Si no etsamois editando borrarl el contendio del input
+  if (!props.id_category) {
+    categoryName.value = '';
+  }
+  borderInput.value = "";
 }
 </script>

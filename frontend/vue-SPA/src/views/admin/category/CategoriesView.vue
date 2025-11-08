@@ -9,7 +9,7 @@
                 <!-- <span class="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full dark:bg-gray-800 dark:text-blue-400">240 vendors</span> -->
             </div>
 
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-800">Ene sta seccion puede visualizar las ctaergorias que pueden usar los usarios</p>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-800">En esta seccion puede visualizar las catergorias que pueden usar los usarios</p>
         </div>
 
         <div class="flex items-center mt-4 gap-x-3">
