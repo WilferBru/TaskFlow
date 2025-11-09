@@ -13,14 +13,53 @@
                 class="text-lg font-semibold text-gray-200">
                 Bienvenido, {{ authStore.user?.name }} 👋
             </h1>
-            <button
-              @click="handleLogout"
-              class="bg-blue-700 text-white px-4 py-4 rounded hover:bg-blue-700 transition"
-            >
-                Cerrar sesión
-            </button>
+            <div class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="m-1 bg-gray-300 items-center w-10 h-10 rounded-4xl">
+                <UserIcon />
+              </div>
+              <ul tabindex="-1" class="dropdown-content menu bg-gray-200 rounded-box z-1 w-52 p-2 shadow-sm">
+                <li class="px-2 py2 text-gray-700">
+                  <RouterLink
+                    to=""
+                    class="hover:bg-gray-700 hover:text-gray-200"
+                  >
+                    Perfil
+                  </RouterLink>
+                </li>
+                <li class="px-2 py2 text-gray-700">
+                  <button
+                    onclick="logout.showModal()"                    
+                    class="hover:bg-gray-700 hover:text-gray-200"
+                  >
+                    Cerrar Sesion
+                  </button>
+                </li>
+              </ul>
+            </div>
         </header>
-
+        <!-- Modal para cerrqar sesion -->
+        <dialog id="logout" class="modal">
+          <div class="modal-box">
+            <h3 class="text-lg font-bold">¿Quieres cerrar sesion?</h3>
+            <p class="py-4">Preciona salir para cerrar sesion</p>
+            <div class="modal-action">
+              <form method="dialog">
+                <button 
+                  class="btn bg-red-500 hover:bg-red-400"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="button"
+                  class="btn bg-blue-500 hover:bg-blue-400" 
+                  @click="handleLogout"
+                >
+                  Salir
+                </button>
+              </form>
+            </div>
+          </div>
+        </dialog>
         <!-- Contenido dinamico -->
         <main class="flex-1 p-6">
             <RouterView />
@@ -42,6 +81,8 @@ import { useAuthStore } from '@/stores/authStore';
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
+import UserIcon from '@/components/common/icons/UserIcon.vue';
+import { text } from 'stream/consumers';
 
 const currentYear = new Date().getFullYear(); // Año para el footer
 const authStore = useAuthStore();

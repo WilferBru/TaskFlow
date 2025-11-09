@@ -50,14 +50,14 @@
         </RouterLink>
         
         <!-- Mi cuenta -->
-        <RouterLink
+        <!-- <RouterLink
           :to="{ name: 'profile' }"
           class="mt-auto flex flex-col items-center rounded text-gray-300 hover:bg-gray-600"
           :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === 'profile' }"
         >
             <UserIcon class="w-10 h-10"/>
             <p class="text-xs mt-1">Mi cuenta</p>
-        </RouterLink>
+        </RouterLink> -->
 
       </nav>
     </aside>
