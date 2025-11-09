@@ -58,7 +58,7 @@ watch(
   (newValue) => {
     stateName.value = newValue || '';
   },
-  { immediate:true }
+  { immediate: true }
 );
 
 // definimos el evento

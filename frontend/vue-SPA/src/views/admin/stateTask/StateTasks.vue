@@ -64,11 +64,11 @@
                                     </div>
                                 </td>
 
-                                <!-- <td class="text-sm whitespace-nowrap">
+                                <td class="text-sm whitespace-nowrap">
                                     <button 
                                         class="btn bg-gray-200 text-black" 
-                                        :popovertarget="`popover-${cat.id_category}`" 
-                                        :style="`anchor-name:--anchor-${cat.id_category}`">
+                                        :popovertarget="`popover-${sta.id_state}`" 
+                                        :style="`anchor-name:--anchor-${sta.id_state}`">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
                                         </svg>
@@ -76,11 +76,11 @@
                                     <ul 
                                         class="dropdown menu w-15 rounded-box bg-gray-200 text-black shadow-sm"
                                         popover 
-                                        :id="`popover-${cat.id_category}`" 
-                                        :style="`position-anchor:--anchor-${cat.id_category}`">
+                                        :id="`popover-${sta.id_state}`" 
+                                        :style="`position-anchor:--anchor-${sta.id_state}`">
                                         <li>
                                             <button
-                                                @click="openEditModal(cat)"
+                                                @click="openEditStateModal(sta)"
                                                 class="flex items-center text-blue-500 justify-center w-10 h-10 rounded-full hover:bg-blue-700 hover:text-gray-100 transition"
                                             >
                                                 <EditIcon />
@@ -89,18 +89,18 @@
                                         <li>
                                             <button 
                                                 class="flex items-center text-red-500 justify-center w-10 h-10 rounded-full hover:bg-red-500 hover:text-gray-100 transition" 
-                                                @click="ModalDeleteCategory(`${cat.id_category}`)"
+                                                @click="ModalDeleteStateTask(`${sta.id_state}`)"
                                             >
                                                 <DeleteIcon />
                                             </button>
                                         </li>
-                                        <DeleteCategoryModal 
-                                            :modal-id="`${cat.id_category}`"
-                                            :category="`${cat.category}`"
-                                            @category-delete="deleteCategory"
+                                        <DeleteStateTaskModal 
+                                            :modal-id="`${sta.id_state}`"
+                                            :state="`${sta.state}`"
+                                            @state-delete="deleteStateTask"
                                         />
                                     </ul>
-                                </td> -->
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -111,8 +111,8 @@
     <!-- Modal para crear y actualizar los estados -->
      <CreateStateTaskModal 
         @input-state="saveStateTask"
-        :id_stateTask="selectedState?.id_state"
-        :stateTask="selectedState?.state"
+        :id_state="selectedState?.id_state"
+        :state="selectedState?.state"
      />
 </section>
 </template>
@@ -122,6 +122,10 @@ import stateTaskService from '@/services/stateTaskService';
 import { onMounted, ref } from 'vue';
 import { useToast } from "vue-toastification";
 import CreateStateTaskModal from '@/components/stateTask/CreateStateTaskModal.vue';
+import EditIcon from '@/components/common/icons/EditIcon.vue';
+import DeleteIcon from '@/components/common/icons/DeleteIcon.vue';
+import DeleteStateTaskModal from '@/components/stateTask/DeleteStateTaskModal.vue';
+
 
 const toast = useToast();
 
@@ -146,13 +150,13 @@ const selectedState = ref<{
 }>({});
 
 const openCreateStateModal = () => {
-    selectedState.value = {}; // sind atos modo crear
+    selectedState.value = {}; // sin datos modo crear
     const modal = document.getElementById('createStateTask') as HTMLDialogElement;
     modal.showModal();
 };
 
 const openEditStateModal = (sta: any) => {
-    selectedState.value = {...sta}; // sind atos modo crear
+    selectedState.value = {...sta};
     const modal = document.getElementById('createStateTask') as HTMLDialogElement;
     modal.showModal();
 };
@@ -160,10 +164,16 @@ const openEditStateModal = (sta: any) => {
 const saveStateTask = async (data: { id_state?: number, state: string }) => {
     try {
         if (data.id_state) {
-            console.log("actualizado");
+            const response = await stateTaskService.update(data);
+            toast.success("Estado actualizado correctamente");
+            const index = stateTasks.value.findIndex(
+                (s) => s.id_state === data.id_state
+            );
+            if (index !== -1) stateTasks.value[index] = response.data;
+            return response;
         } else {
            const response = await stateTaskService.create(data);
-           toast.success("Esatdo creado correctamente"); 
+           toast.success("Estado creado correctamente"); 
            // acutalizar lista de estados
            stateTasks.value.push(response.data);
            return response;
@@ -172,5 +182,28 @@ const saveStateTask = async (data: { id_state?: number, state: string }) => {
         console.error("❌ Error creando el estado:", error);
     }
 };
+
+const ModalDeleteStateTask = (id_state: string) => {
+    const modal = document.getElementById(id_state) as HTMLDialogElement | null;
+    if (modal) {
+        modal.showModal();
+    } else {
+        console.warn(`⚠️ No se encontró el modal con id ${id_state}`);
+    }
+};
+
+const deleteStateTask = async (id_state: string) => {
+    try {
+        const response = await stateTaskService.delete(Number(id_state));
+        toast.success("Esatdo eliminada correctamente");
+        // Eliminar de la lista local
+        stateTasks.value = stateTasks.value.filter(
+            (s) => Number(s.id_state) !== Number(id_state)
+        );
+        return response.data;
+    } catch (error: any) {
+        console.error("❌ Error eliminando el estado:", error);
+    }
+}
 
 </script>

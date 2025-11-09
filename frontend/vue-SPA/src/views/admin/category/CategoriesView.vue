@@ -202,7 +202,7 @@ const deleteCategory = async (id_category: string) => {
         toast.success("Categoria eliminada correctamente");
         // eliminar de la lista local
         categories.value = categories.value.filter(
-            (c) => Number(c.id_category) !== Number(id_category)
+            (c) => c.id_category !== Number(id_category)
         );
         return response;
     } catch (error) {
