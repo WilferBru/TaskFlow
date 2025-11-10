@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import authService from "@/services/authService";
 
 interface User {
-  id: number;
+  id_user: number;
   name: string;
   email: string;
   role: string;
