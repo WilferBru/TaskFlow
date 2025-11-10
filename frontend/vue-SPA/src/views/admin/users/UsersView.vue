@@ -206,10 +206,10 @@ const toast = useToast();
 interface userData {
      id_user?: number;
      name: string;
-     email: string;
+     email?: string;
      role: string;
-     password: string;
-     password_confirmation: string;
+     password?: string;
+     password_confirmation?: string;
 }
 
 // variable reactiva apra guardar los datos del user
@@ -218,6 +218,8 @@ const selectedUser = ref<{
     name?: string;
     role?: string;
     email?: string;
+    password?: string;
+    password_confirmation?: string;
 }>({});
 
 const users = ref<{
@@ -226,6 +228,8 @@ const users = ref<{
     role: string,
     email: string,
     created_at: Date,
+    password: string;
+    password_confirmation: string;
 }[]>([]);
 
 onMounted(async () => {

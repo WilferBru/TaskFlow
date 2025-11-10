@@ -282,7 +282,7 @@ const emitUser = () => {
         return;
       }
       // validar que sea mayor a 8 caracteres las password
-      if (userPass.value.length <= 8) {
+      if (userPass.value.length < 8) {
         lengthPass.value = true;
         return;
       }
