@@ -9,7 +9,7 @@
                 <div class="flex flex-row mb-1 sm:mb-0">
                     <div class="relative">
                         <select
-                            class="appearance-none h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            class="appearance h-full rounded-l border block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             <option>10</option>
                             <option>50</option>
                             <option>100</option>
@@ -23,9 +23,11 @@
                     </div>
                     <div class="relative">
                         <select
-                            class="appearance-none h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
-                            <option>User</option>
-                            <option>Admin</option>
+                            v-model="searchRole"
+                            class="appearance h-full rounded-r border-t sm:rounded-r-none sm:border-r-0 border-r border-b block appearance-none w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight focus:outline-none focus:border-l focus:border-r focus:bg-white focus:border-gray-500">
+                            <option value="">Todos</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -44,7 +46,8 @@
                         </svg>
                     </span>
                     <input 
-                        placeholder="Buscar Usuario"
+                        v-model="searchTerm"
+                        placeholder="Buscar"
                         class="appearance-none 
                                rounded-r rounded-l 
                                sm:rounded-l-none border 
@@ -98,7 +101,7 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="us in users"
+                                v-for="us in filteredUsers"
                                 :key="us.id_user"
                             >
                                 <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -192,7 +195,7 @@
 <script setup lang="ts">
 import PrevNext from '@/components/users/PrevNext.vue';
 import userService from '@/services/userService';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useToast } from "vue-toastification";
 import CreateUserModal from '@/components/users/CreateUserModal.vue';
 import EditIcon from '@/components/common/icons/EditIcon.vue';
@@ -202,6 +205,8 @@ import DeleteUserModal from '@/components/users/DeleteUserModal.vue';
 
 const toast = useToast();
 
+const searchTerm = ref(""); // variable para filtrar en la tabla
+const searchRole = ref(""); // variable para filtrar por rol en la tabla
 
 interface userData {
      id_user?: number;
@@ -240,6 +245,25 @@ onMounted(async () => {
        console.error("Error cargando usuarios:", error); 
     }
 });
+// filtadro de la tabla
+const filteredUsers = computed(() => {
+  const term = searchTerm.value.toLowerCase();
+  const role = searchRole.value.toLowerCase();
+
+  return users.value.filter(u => {
+    const matchesTerm =
+      !term ||
+      u.name.toLowerCase().includes(term) ||
+      u.email.toLowerCase().includes(term) ||
+      String(u.id_user).includes(term);
+
+    const matchesRole =
+      !role || u.role.toLowerCase() === role;
+
+    return matchesTerm && matchesRole;
+  });
+});
+
 
 const openCreateModal = () => {
     selectedUser.value = {}; // si no hay datos vamos a crear
