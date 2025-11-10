@@ -20,6 +20,8 @@ import RegisterView from '@/views/Auth/RegisterView.vue';
 import CategoriesView from '@/views/admin/category/CategoriesView.vue';
 // state tasks
 import StateTasks from '@/views/admin/stateTask/StateTasks.vue';
+// users
+import UsersView from '@/views/admin/users/UsersView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +75,14 @@ const router = createRouter({
           path: 'estados-tareas',
           name: 'state-tasks',
           component: StateTasks,
+          meta: { requiresAuth: true },
+        },
+
+        // Users
+        {
+          path: 'usuarios',
+          name: 'users',
+          component: UsersView,
           meta: { requiresAuth: true },
         },
       ]

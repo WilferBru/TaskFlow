@@ -21,9 +21,9 @@
         
         <RouterLink
           v-if="userStore.user?.role === 'admin'"
-          :to="{ name: '' }"
+          :to="{ name: 'users' }"
           class="flex flex-col items-center px-3 py-3 rounded text-gray-300 hover:bg-gray-600"
-          :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === '' }"
+          :class="{ 'text-sky-500 font-semibold bg-gray-700': $route.name === 'users' }"
         >
             <UsersIcon />
             <p class="text-xs mt-2">Usuarios</p>
