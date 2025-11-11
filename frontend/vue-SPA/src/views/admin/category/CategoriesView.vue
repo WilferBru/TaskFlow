@@ -36,6 +36,10 @@
                         <thead class="bg-gray-50 dark:bg-gray-900">
                             <tr>
                                 <th scope="col" class="px-12 py-3.5 text-sm font-bold text-left rtl:text-right text-gray-200">
+                                    ID
+                                </th>
+                               
+                                <th scope="col" class="px-12 py-3.5 text-sm font-bold text-left rtl:text-right text-gray-200">
                                     Categoria
                                 </th>
 
@@ -53,6 +57,12 @@
                                 v-for="cat in categories"
                                 :key="cat.id_category"                                
                             >
+                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
+                                    <div>
+                                        <h2 class="font-normal text-gray-800 dark:text-white ">{{ cat.id_category }}</h2>
+                                        <!-- <p class="text-sm font-normal text-gray-600 dark:text-gray-400">catalogapp.io</p> -->
+                                    </div>
+                                </td>
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
                                         <h2 class="font-normal text-gray-800 dark:text-white ">{{ cat.category }}</h2>
