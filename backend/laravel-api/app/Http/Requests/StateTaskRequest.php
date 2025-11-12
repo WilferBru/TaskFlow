@@ -17,7 +17,8 @@ class StateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'state' => 'required|string|max:255'
+            'state' => 'required|string|max:255',
+            'level' => 'required|integer|min:1|max:3',
         ];
     }
 
@@ -25,7 +26,8 @@ class StateTaskRequest extends FormRequest
     {
         return [
             'state.required' => 'El campo estado es obligatorio',
-            'state.max'      => 'el campo acepta maximo 255 caracteres'
+            'state.max'      => 'el campo acepta maximo 255 caracteres',
+            'level.required' => 'El campo nivel es obligatorio',
         ];
     }
 }

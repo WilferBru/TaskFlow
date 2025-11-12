@@ -13,6 +13,7 @@ class StateTaskResource extends JsonResource
         return [
             'id_state'   => $this->id_state,
             'state'      => $this->state,
+            'level'      => $this->level,
             'created_at' => $this->created_at
         ];
     }

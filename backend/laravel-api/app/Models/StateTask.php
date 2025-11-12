@@ -14,7 +14,10 @@ class StateTask extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $fillable = ['state'];
+    protected $fillable = [
+        'state',
+        'level',
+    ];
 
     public function tasks()
     {

@@ -21,6 +21,7 @@ class TaskResource extends JsonResource
             'metadata'    => $this->metadata,
             'category'    => $this->category ? $this->category->category : null,
             'state'       => $this->stateTask ? $this->stateTask->state : null,
+            'state_level' => $this->stateTask ? $this->stateTask->level : null,
             'due_date'    => $this->due_date,
             'created_at'  => $this->created_at,
         ];
