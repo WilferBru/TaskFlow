@@ -10,7 +10,7 @@
         v-model="attr.key"
         type="text"
         placeholder="Nombre del atributo"
-        class="flex-1 px-3 py-2 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+        class="flex-1 px-3 py-2 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
       />
 
       <!-- Valor del atributo -->
@@ -18,7 +18,7 @@
         v-model="attr.value"
         type="text"
         placeholder="Valor del atributo"
-        class="flex-1 px-3 py-2 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+        class="flex-1 px-3 py-2 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
       />
 
       <!-- Botón eliminar -->

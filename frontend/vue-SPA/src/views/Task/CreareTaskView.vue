@@ -11,66 +11,90 @@
         </label>
         <input
             v-model="title"
-            type="email"
-            name="email"
-            value=""
-            class="w-full max-w-xl px-4 py-3 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+            placeholder="Agregue un titulo a su tarea"
+            class="w-full max-w-xl px-4 py-3 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+            :class="emptyTitle"
         />
+        <p
+            class="text-sm text-red-500 font-medium mt-3 ml-2"
+            v-if="messageErrorTitle"
+        >
+            El campo titulo es obligatorio
+        </p>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
         <div>
-        <label class="block text-black text-sm font-medium mb-2">
-            Categoria
-        </label>
-        <select
-            v-model="category"
-            name="country"
-            value=""
-            class="w-full px-4 py-3 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
-        >
-            <option value="" disabled>Seleccione una categoría</option>
-            <option 
-                v-for="cat in categories"
-                :key="cat.id_category"
-                :value="cat.id_category"
+            <label class="block text-black text-sm font-medium mb-2">
+                Categoria
+            </label>
+            <select
+                v-model="category"
+                class="w-full px-4 py-3 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+                :class="emptyCategory"
             >
-                {{ cat.category }}
-            </option>
-        </select>
+                <option value="" disabled>Seleccione una categoría</option>
+                <option 
+                    v-for="cat in categories"
+                    :key="cat.id_category"
+                    :value="cat.id_category"
+                >
+                    {{ cat.category }}
+                </option>
+            </select>
+            <p
+            class="text-sm text-red-500 font-medium mt-3 ml-2"
+            v-if="messageErrorCategory"
+            >
+                El campo Categoria es obligatorio
+            </p>
         </div>
         <div>
-        <label class="block text-black text-sm font-medium mb-2">
-            Estado
-        </label>
-        <select
-            v-model="stateTask"
-            value=""
-            class="w-full px-4 py-3 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
-        >
-            <option value="" disabled>Seleccione un estado</option>
-            <option 
-                v-for="sta in states_tasks"
-                :key="sta.id_state"
-                :value="sta.id_state"
+            <label class="block text-black text-sm font-medium mb-2">
+                Estado
+            </label>
+            <select
+                v-model="stateTask"
+                class="w-full px-4 py-3 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+                :class="emptyState"
             >
-                {{ sta.state }}
-            </option>
-        </select>
+                <option value="" disabled>Seleccione un estado</option>
+                <option 
+                    v-for="sta in states_tasks"
+                    :key="sta.id_state"
+                    :value="sta.id_state"
+                >
+                    {{ sta.state }}
+                </option>
+            </select>
+            <p
+            class="text-sm text-red-500 font-medium mt-3 ml-2"
+            v-if="messageErrorState"
+        >
+            El campo Estado es obligatorio
+        </p>
         </div>
         
         <div>
-        <label class="block text-black text-sm font-medium mb-2">
-            Prioridad
-        </label>
-        <select
-            v-model="priority"
-            name="country"
-            class="w-full px-4 py-3 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+            <label class="block text-black text-sm font-medium mb-2">
+                Prioridad
+            </label>
+            <select
+                v-model="priority"
+                name="country"
+                class="w-full px-4 py-3 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+                :class="emptyPriority"
+            >
+                <option value="" disabled>Seleccionar</option>
+                <option value="alta">Alta</option>
+                <option value="media">Media</option>
+                <option value="baja">Baja</option>
+            </select>
+            <p
+            class="text-sm text-red-500 font-medium mt-3 ml-2"
+            v-if="messageErrorPriority"
         >
-            <option value="alta">Alta</option>
-            <option value="media">Media</option>
-            <option value="baja">Baja</option>
-        </select>
+            El campo Prioridad es obligatorio
+        </p>
         </div>
         
         <div>
@@ -83,12 +107,15 @@
             name="lastName"
             value=""
 
-            class="w-full px-4 py-3 bg-slate-300 border border-slate-600 rounded-lg text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
+            class="w-full px-4 py-3 bg-slate-300 border-0 rounded-lg text-black placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
         />
         </div>
     </div>  
 
     <div class="mt-6">
+        <label class="block text-black text-lg font-medium mb-2">
+            Atributos de tu tarea
+        </label>
         <TaskMetadata v-model="metadata"/>
     </div>
 
@@ -125,14 +152,17 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import TaskMetadata from '@/components/task/TaskMetadata.vue';
 import { useToast } from "vue-toastification";
 import taskService from '@/services/taskService';
 import categoryService from '@/services/categoryService';
 import stateTaskService from '@/services/stateTaskService';
+import { useRouter } from 'vue-router';
 
 const toast = useToast();
+
+const router = useRouter();
 
 const title = ref("");
 const category = ref("");
@@ -141,6 +171,16 @@ const priority = ref("");
 const due_date = ref("");
 const metadata = ref<string[]>([]);
 const description = ref("");
+
+// Errores de los input
+const emptyTitle = ref("");
+const emptyCategory = ref("");
+const emptyState = ref("");
+const emptyPriority = ref("");
+const messageErrorTitle = ref(false);
+const messageErrorCategory = ref(false);
+const messageErrorState = ref(false);
+const messageErrorPriority = ref(false);
 
 const categories = ref<{ id_category:number, category: string }[]>([]); // Array de categorias
 
@@ -159,26 +199,70 @@ onMounted( async () => {
         console.error("Error cargando estados:", err);
     }
 });
+
+// quitar las alertas de validacion cuando escriban en los input
+watch([title, category, stateTask, priority], () => {
+    if (title.value.trim()) {
+        emptyTitle.value = "";
+        messageErrorTitle.value = false;
+    }
+    
+    if (category.value) {
+        emptyCategory.value = "";
+        messageErrorCategory.value = false;
+    }
+    
+    if (stateTask.value) {
+        emptyState.value = "";
+        messageErrorState.value = false;
+    }
+    
+    if (priority.value) {
+        emptyPriority.value = "";
+        messageErrorPriority.value = false;
+    }
+});
+
 const saveTask = async () => {
-    if (!title.value || !category.value || !stateTask.value || !priority.value) {
-        toast.error("Faltan campso por llenar");
+    if (!title.value) {
+        emptyTitle.value = "border-2 border-red-600";
+        messageErrorTitle.value = true;
+        return;
+    }
+    
+    if (!category.value) {
+        emptyCategory.value = "border-2 border-red-600";
+        messageErrorCategory.value = true;
+        return;
+    }
+    
+    if (!stateTask.value) {
+        emptyState.value = "border-2 border-red-600";
+        messageErrorState.value = true;
+        return;
+    }
+    
+    if (!priority.value) {
+        emptyPriority.value = "border-2 border-red-600";
+        messageErrorPriority.value = true;
         return;
     }
 
     try {
         const payload = {
         title: title.value,
-        category: category.value,
-        state: stateTask.value,
+        category_id: category.value,
+        state_id: stateTask.value,
         priority: priority.value,
         due_date: due_date.value,
         metadata: metadata.value,
         description: description.value, 
         };
 
-        const response = await taskService.createTask(payload);
+        await taskService.create(payload);
+        // console.log(payload);
         toast.success("Tarea creada correctamente");
-        return response;
+        router.push({ name: 'task' });
     } catch (error) {
         console.error("❌ Error creando tarea:", error);
     }
