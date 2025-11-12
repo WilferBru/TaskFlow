@@ -32,7 +32,7 @@
           <input 
             type="text" 
             id="simple-search" 
-            class="text-sm rounded-4xl w-full pl-10 p-2.5 bg-gray-300 placeholder-gray-700 text-gray-800" 
+            class="text-sm rounded-4xl w-full pl-10 p-2.5 bg-gray-300 placeholder-gray-700 text-gray-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition" 
             placeholder="Buscar Tarea..." 
             required
           >
