@@ -17,6 +17,7 @@ class TaskResource extends JsonResource
             'category_id' => $this->category_id,
             'title'       => $this->title,
             'description' => $this->description,
+            'priority'    => $this->priority,
             'metadata'    => $this->metadata,
             'category'    => $this->category ? $this->category->category : null,
             'state'       => $this->stateTask ? $this->stateTask->state : null,
