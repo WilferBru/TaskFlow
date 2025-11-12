@@ -41,6 +41,10 @@
                                 <th scope="col" class="px-12 py-3.5 text-sm font-bold text-left rtl:text-right text-gray-200">
                                     Estado
                                 </th>
+                                
+                                <th scope="col" class="px-12 py-3.5 text-sm font-bold text-left rtl:text-right text-gray-200">
+                                    Nivel
+                                </th>
 
                                 <th scope="col" class="px-4 py-3.5 text-sm font-bold text-left rtl:text-right text-gray-200">
                                     Creado
@@ -65,6 +69,12 @@
                                 <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
                                     <div>
                                         <h2 class="font-normal text-gray-800 dark:text-white ">{{ sta.state }}</h2>
+                                        <!-- <p class="text-sm font-normal text-gray-600 dark:text-gray-400">catalogapp.io</p> -->
+                                    </div>
+                                </td>
+                                <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
+                                    <div>
+                                        <h2 class="font-normal text-gray-800 dark:text-white ">{{ sta.level }}</h2>
                                         <!-- <p class="text-sm font-normal text-gray-600 dark:text-gray-400">catalogapp.io</p> -->
                                     </div>
                                 </td>
@@ -123,6 +133,7 @@
         @input-state="saveStateTask"
         :id_state="selectedState?.id_state"
         :state="selectedState?.state"
+        :level="selectedState?.level"
      />
 </section>
 </template>
@@ -142,6 +153,7 @@ const toast = useToast();
 const stateTasks = ref<{
     id_state: number;
     state: string;
+    level: number;
     created_at: Date;
 }[]>([]);
 
@@ -157,6 +169,7 @@ onMounted(async () => {
 const selectedState = ref<{
     id_state?: number;
     state?: string;
+    level?: number;
 }>({});
 
 const openCreateStateModal = () => {
@@ -171,7 +184,7 @@ const openEditStateModal = (sta: any) => {
     modal.showModal();
 };
 
-const saveStateTask = async (data: { id_state?: number, state: string }) => {
+const saveStateTask = async (data: { id_state?: number, state: string, level: number }) => {
     try {
         if (data.id_state) {
             const response = await stateTaskService.update(data);
@@ -179,7 +192,7 @@ const saveStateTask = async (data: { id_state?: number, state: string }) => {
             const index = stateTasks.value.findIndex(
                 (s) => s.id_state === data.id_state
             );
-            if (index !== -1) stateTasks.value[index] = response.data;
+            if (index !== -1) stateTasks.value.splice(index, 1, response.data);
             return response;
         } else {
            const response = await stateTaskService.create(data);
@@ -205,7 +218,7 @@ const ModalDeleteStateTask = (id_state: string) => {
 const deleteStateTask = async (id_state: string) => {
     try {
         const response = await stateTaskService.delete(Number(id_state));
-        toast.success("Esatdo eliminada correctamente");
+        toast.success("Estado eliminada correctamente");
         // Eliminar de la lista local
         stateTasks.value = stateTasks.value.filter(
             (s) => Number(s.id_state) !== Number(id_state)

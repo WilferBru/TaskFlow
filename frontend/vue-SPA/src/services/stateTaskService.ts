@@ -3,6 +3,7 @@ import api from "@/plugins/axios";
 interface stateTaskData {
     id_state?: number;
     state: string;
+    level: number;
 }
 
 export default {

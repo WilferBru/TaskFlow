@@ -8,8 +8,13 @@
         >
           <div class="mb-3 text-right">
             <button 
-                class="text-gray-50 px-3 rounded-2xl transition-all duration-300 hover:scale-110 hover:bg-blue-500 hover:text-gray-200"
-                title="estado"
+                class="text-gray-50 px-3 rounded-2xl transition-all duration-300"
+                :class="
+                  t.state_level === 1 ? 'bg-amber-800 hover:scale-110 hover:bg-amber-600 hover:text-gray-200' :
+                  t.state_level === 2 ? 'bg-blue-800 hover:scale-110 hover:bg-blue-500 hover:text-gray-200' :
+                  t.state_level === 3 ? 'bg-emerald-700 hover:scale-110 hover:bg-emerald-500 hover:text-gray-200' :
+                  'bg-gray-900'
+                "
             >               
                {{ t.state }}
             </button>
@@ -56,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import ListTask from '@/components/common/icons/listTask.vue';
+// import ListTask from '@/components/common/icons/listTask.vue';
 import TagIcon from '@/components/common/icons/TagIcon.vue';
 import taskService from '@/services/taskService';
 import { onMounted, ref } from 'vue';
@@ -71,6 +76,7 @@ const tasks = ref<{
   priority: string,
   category: string,
   state: string,
+  state_level: number,
   description: Text,
   metadata: string
 }[]>([]);
