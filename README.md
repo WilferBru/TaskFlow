@@ -54,9 +54,31 @@ y seleccionar la rama en la que quiere trabajar(dev o main)
 git switch dev
 ```
 
-2. **Editar .env**
+2. **Configuracion de archivos .env**
 
-Crea tu archivo .env basado en .env.example y configura la conexión a la base de datos (~/TaskFlow/backend/laravel-api/.env).
+Crea los archivos .env necesarios para la conexión entre el frontend, el backend y la base de datos.
+
+#### Archivo principal del proyecto
+
+Crea un archivo .env en la raíz del proyecto basándote en el archivo de ejemplo:
+
+```bash
+~/TaskFlow/.env.example
+```
+#### Archivo del backend (Laravel API)
+
+Crea un archivo .env en el backend para configurar la conexión con la base de datos:
+
+```bash
+~/TaskFlow/backend/laravel-api/.env.example
+```
+#### Archivo del frontend (Vue SPA)
+
+Crea un archivo .env en el frontend para definir la URL base desde donde se consumirá la API y realizar las peticiones HTTP:
+
+```bash
+~/TaskFlow/frontend/vue-SPA/.env.example
+```
 
 3. **levantar contenedores**
 
