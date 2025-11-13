@@ -14,6 +14,10 @@ La idea principal de este proyecto es poner a prueba los conocimientos; la idea 
   - Estado
   - Palabra clave en título o descripción
 - Manejo de herramientas de Laravel como **Request**, **Resource**, **Scope** y rutas **API**
+- Implementacion de policy para permisos y manejos de rol y acciones para separar la logica solo
+  para el controaldor user
+- Impĺemnataciond e accion para el controlador Task, para separar logica
+- Implementar policy para los controladores Task, StateTask y Category
 
 ---
 
@@ -50,9 +54,31 @@ y seleccionar la rama en la que quiere trabajar(dev o main)
 git switch dev
 ```
 
-2. **Editar .env**
+2. **Configuracion de archivos .env**
 
-Crea tu archivo .env basado en .env.example y configura la conexión a la base de datos (~/TaskFlow/backend/laravel-api/.env).
+Crea los archivos .env necesarios para la conexión entre el frontend, el backend y la base de datos.
+
+#### Archivo principal del proyecto
+
+Crea un archivo .env en la raíz del proyecto basándote en el archivo de ejemplo:
+
+```bash
+~/TaskFlow/.env.example
+```
+#### Archivo del backend (Laravel API)
+
+Crea un archivo .env en el backend para configurar la conexión con la base de datos:
+
+```bash
+~/TaskFlow/backend/laravel-api/.env.example
+```
+#### Archivo del frontend (Vue SPA)
+
+Crea un archivo .env en el frontend para definir la URL base desde donde se consumirá la API y realizar las peticiones HTTP:
+
+```bash
+~/TaskFlow/frontend/vue-SPA/.env.example
+```
 
 3. **levantar contenedores**
 
@@ -80,20 +106,61 @@ email: prueba@prueba.com
 password: prueba123
 ```
 
+```bash
+# frontend
+http://localhost:5173/
+```
+
+```bash
+# backend
+http://localhost:8000/api/
+```
+
 Pero tambien puede registrarse como usuario en register
+
+---
+
+## Documentación de la API (Backend)
+
+Toda la información sobre los endpoints, autenticación y roles de usuario se encuentra en el archivo:
+
+[backend/laravel-api/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/backend/laravel-api/README.md)
+
+Ahí encontrarás:
+
+- Cómo registrar y autenticar usuarios
+- Qué rutas están disponibles
+- Qué permisos tiene cada rol (admin y user)
+- Ejemplos de peticiones y respuestas JSON
+
+---
+
+## Documentación del Frontend
+
+Para conocer cómo configurar y ejecutar la parte del frontend, visita:
+
+[frontend/vue-SPA/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/frontend/vue-SPA/README.md)
 
 ---
 
 ## Próximos pasos
 
-- Implementar Roles y permisos para usuarios.
-
 - Mejorar la interfaz de Vue.js para mostrar tareas y filtros.
 
 - Añadir pruebas unitarias y de integración.
 
-- Subir la imagen de produccion a Dockerhub
+- Subir la imagen de produccion a Dockerhub.
+
+- Implementar Nginx en las imagens build
 
 - Implementar Github Actions
 
 - Desplegar en AWS
+
+---
+
+👨‍💻 Autor
+
+Wilfer Bru
+Desarrollador Laravel + Vue.js
+[Linkedin](https://www.linkedin.com/in/wilfer-jose-bru-torres-455b7220b)
