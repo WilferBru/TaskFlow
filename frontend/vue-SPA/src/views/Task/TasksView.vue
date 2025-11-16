@@ -7,17 +7,38 @@
           class="flex flex-col group bg-info-content rounded-2xl p-4 transition-all duration-300 lg:p-8"
         >
           <div class="mb-3 text-right">
-            <button 
-                class="text-gray-50 px-3 rounded-2xl transition-all duration-300"
+            <div class="dropdown dropdown-end relative">
+              <button
+                @click="openDropdown === t.id_task ? openDropdown = null : openDropdown = t.id_task"
+                class="btn rounded-2xl text-white"
                 :class="
-                  t.state_level === 1 ? 'bg-amber-800 hover:scale-110 hover:bg-amber-600 hover:text-gray-200' :
-                  t.state_level === 2 ? 'bg-blue-800 hover:scale-110 hover:bg-blue-500 hover:text-gray-200' :
-                  t.state_level === 3 ? 'bg-emerald-700 hover:scale-110 hover:bg-emerald-500 hover:text-gray-200' :
+                  t.state_level === 1 ? 'bg-amber-800 hover:bg-amber-600' :
+                  t.state_level === 2 ? 'bg-blue-800 hover:bg-blue-500' :
+                  t.state_level === 3 ? 'bg-emerald-700 hover:bg-emerald-500' :
                   'bg-gray-900'
                 "
-            >               
-               {{ t.state }}
-            </button>
+              >
+                {{ t.state }}
+              </button>
+
+              <ul
+                v-if="openDropdown === t.id_task"
+                class="absolute right-0 mt-2 w-52 bg-base-200 text-gray-900 dark:text-gray-100 rounded-box z-20 shadow-lg"
+              >
+                <li
+                  v-for="s in state.filter(st => st.id_state !== t.id_state)"
+                  :key="s.id_state"
+                >
+                  <button
+                    class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded"
+                    @click="selectedState(t, s)"
+                  >
+                    {{ s.state }}
+                  </button>
+                </li>
+              </ul>
+            </div>
+
           </div>
           <div class="flex items-center gap-x-2">
             <div>
@@ -64,31 +85,73 @@
 // import ListTask from '@/components/common/icons/listTask.vue';
 import TagIcon from '@/components/common/icons/TagIcon.vue';
 import taskService from '@/services/taskService';
+import stateTaskService from '@/services/stateTaskService';
 import { onMounted, ref } from 'vue';
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
+
+const openDropdown = ref<number | null>(null);
 
 const tasks = ref<{
   id_task: number,
   title: string,
   due_date: Date,
   priority: string,
+  id_category: number,
   category: string,
+  id_state: number,
   state: string,
   state_level: number,
   description: Text,
   metadata: string
 }[]>([]);
 
+const state = ref<{
+  id_state: number,
+  state: string,
+  level: number
+}[]>([]);
+
 onMounted(async () => {
+    // Obtener las tareas
     try {
       const response = await taskService.getAll();
       tasks.value = response.data;
     } catch (error) {
       console.error("Error cargando tareas:", error); 
     }
+    
+    // obtner los estados de tareas
+    try {
+      const response = await stateTaskService.getAll();
+      state.value = response;
+    } catch (error) {
+      console.error("Error cargando estado de tareas: ", error); 
+    }
 });
+
+const selectedState = async (task: any, stateItem: any) => {
+  try {
+    await taskService.updateState({
+      id_task: task.id_task,
+      state_id: stateItem.id_state
+    });
+
+    // actualizar en la UI
+    task.state = stateItem.state;
+    task.id_state = stateItem.id_state;
+    task.state_level = stateItem.level;
+
+    // cerrar el dropdown al seleccionar
+    openDropdown.value = null;
+
+    toast.success(`Estado actualizado: ${task.title}`);
+  } catch (error) {
+    console.error(error);
+    toast.error("Error actualizando estado");
+  }
+};
 
 </script>
 

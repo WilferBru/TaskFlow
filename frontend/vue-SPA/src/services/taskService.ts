@@ -10,6 +10,11 @@ interface TaskPayload {
    description: string; 
 };
 
+interface UpdateState {
+    id_task: number;
+    state_id: number;
+}
+
 export default {
     async getAll() {
         try {
@@ -30,4 +35,16 @@ export default {
             throw error;
         }
     },
+
+    async updateState(data: UpdateState) {
+        try {
+            const response = await api.put(`/tasks/updateState/${data.id_task}`, {
+                state_id: data.state_id
+            });
+            return response.data;
+        } catch (error: any) {
+            console.log("Error al actualizar el estado de la tarea", error.response?.data || error.message);
+            throw error;
+        }
+    }
 }
