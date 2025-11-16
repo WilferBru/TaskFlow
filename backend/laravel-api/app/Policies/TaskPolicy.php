@@ -29,6 +29,11 @@ class TaskPolicy
         return true;
     }
 
+    public function updateState(User $user, Task $task): bool
+    {
+        return $user->id_user === $task->user_id;
+    }
+
     public function update(User $user, Task $task): bool
     {
         return $user->id_user === $task->user_id;

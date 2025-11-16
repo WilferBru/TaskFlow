@@ -44,5 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // --------------------------------
 
     Route::get('/tasks/filter', [TaskController::class, 'filter']);
+    Route::put('/tasks/updateState/{task}', [TaskController::class, 'updateState']);
     Route::apiResource('/tasks', TaskController::class);
 });

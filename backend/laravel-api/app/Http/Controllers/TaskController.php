@@ -7,9 +7,11 @@ use App\Actions\Task\FilterTaskAction;
 use App\Actions\Task\IndexTaskAction;
 use App\Actions\Task\ShowTaskAction;
 use App\Actions\Task\StoreTaskAction;
+use App\Actions\Task\UpdateStateAction;
 use App\Actions\Task\UpdateTaskAction;
 use App\Http\Requests\FilterTaskRequest;
 use App\Http\Requests\TaskRequest;
+use App\Http\Requests\UpdateStateRequest;
 use App\Http\Resources\TaskResource;
 use App\Http\Responses\apiResponse;
 use App\Models\Task;
@@ -116,6 +118,27 @@ class TaskController extends Controller
         } catch (\Throwable $e) {
             return apiResponse::error(
                 'Error al obtener la tarea',
+                $e,
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+    public function updateState(UpdateStateRequest $request, Task $task, UpdateStateAction $updateState)
+    {
+        $this->authorize('updateState', $task);
+
+        try {
+            $state = $updateState->execute($request->validated(), $task);
+
+            return apiResponse::success(
+                new TaskResource($state),
+                'Estado de la tarea actualizada',
+                JsonResponse::HTTP_OK
+            );
+        } catch (\Throwable $e) {
+            return apiResponse::error(
+                'Error al actualizar el estado de la tarea',
                 $e,
                 JsonResponse::HTTP_BAD_REQUEST
             );
