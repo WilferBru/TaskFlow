@@ -6,7 +6,8 @@
           :key="t.id_task"
           class="flex flex-col group bg-info-content rounded-2xl p-4 transition-all duration-300 lg:p-8"
         >
-          <div class="mb-3 text-right">
+          <div 
+            class="mb-3 text-right">
             <div class="dropdown dropdown-end relative">
               <button
                 @click="openDropdown === t.id_task ? openDropdown = null : openDropdown = t.id_task"
@@ -40,13 +41,15 @@
             </div>
 
           </div>
-          <div class="flex items-center gap-x-2">
+          <RouterLink
+            :to="{ name: 'task.show', params: { id_task: t.id_task } }"
+            class="flex items-center gap-x-2">
             <div>
               <h3 class="text-2xl font-bold text-gray-50">{{ t.title }}</h3>
               <span class="text-xs text-gray-300" v-if="t.due_date"><b>Fecha limite:</b> {{ new Date(t.due_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) }}</span>
               <span class="text-xs text-gray-300" v-else><b>Sin fecha limite</b></span>
             </div>
-          </div>
+          </RouterLink>
           <div class="my-4 flex-1"> 
             <div class="text-sm font-medium">
               <p
@@ -146,7 +149,7 @@ const selectedState = async (task: any, stateItem: any) => {
     // cerrar el dropdown al seleccionar
     openDropdown.value = null;
 
-    toast.success(`Estado actualizado: ${task.title}`);
+    toast.success(`Se actualizo el estado de la tarea ${task.title}`);
   } catch (error) {
     console.error(error);
     toast.error("Error actualizando estado");
