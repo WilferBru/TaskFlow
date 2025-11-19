@@ -26,6 +26,23 @@
             v-else-if="task"
             class="bg-white text-gray-700 rounded-lg shadow p-6 space-y-6"
         >
+            <div class="text-sm text-gray-400 select-none">
+                <span
+                v-if="!editDate"
+                @click="startEditDate"
+                ref="due_dateEl"                
+                class="cursor-pointer"
+                ></span>
+                <input 
+                    v-else
+                    type="date"
+                    class="bg-transparent outline broder-b border-gray-300 text-gray-600"
+                    v-model="local.due_date"
+                    @blur="finishEditDate"
+                    @keyup.enter="finishEditDate"
+
+                >
+            </div>            
             <!-- Titulo editable -->
             <div class="flex items-center gap-4">
                 <div
@@ -73,6 +90,7 @@
 import categoryService from '@/services/categoryService';
 import stateTaskService from '@/services/stateTaskService';
 import taskService from '@/services/taskService';
+import { finished } from 'stream';
 import { onMounted, ref, nextTick, onBeforeUnmount } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
@@ -133,6 +151,9 @@ const id_stateEl = ref<HTMLElement | null>(null);
 const stateEl = ref<HTMLElement | null>(null);
 const descriptionEl = ref<HTMLElement | null>(null);
 
+// editar fecha limite
+const editDate = ref(false);
+
 // Recibimos la tarea, estado y categoria
 async function loadTask() {
     loading.value = true;
@@ -187,7 +208,18 @@ onMounted( async () => {
     if (descriptionEl.value) descriptionEl.value.innerText = local.value.description;
     if (priorityEl.value) priorityEl.value.innerText = local.value.priority;
     if (metadataEl.value) metadataEl.value.innerText = local.value.metadata.join(", ");
-    if (due_dateEl.value) due_dateEl.value.innerText = String(local.value.due_date);
+    // Poner el formato de fecha deseable
+    if (due_dateEl.value) {
+        if (!local.value.due_date) {
+            due_dateEl.value.innerText = 'Sin fecha límite';
+            return;
+        }
+        const formatted = new Date(local.value.due_date).toLocaleDateString(
+            'es-ES',
+            {day: 'numeric', month: 'long'}
+        );
+        due_dateEl.value.innerText = `Fecha limite: ${formatted}`;
+    }
     if (id_categoryEl.value) id_categoryEl.value.innerText = String(local.value.id_category);
     if (id_stateEl.value) id_stateEl.value.innerText = String(local.value.id_state);
     if (stateEl.value) stateEl.value.innerText = String(local.value.state);
@@ -197,5 +229,35 @@ onMounted( async () => {
 onBeforeUnmount(() => {
     window.removeEventListener('click', handleClickOutside)
 });
+
+/**
+ * abrir y cerrar input para editar la fecha limite
+ */
+
+ function startEditDate() {
+    editDate.value = true;
+ }
+
+ async function finishEditDate() {
+    editDate.value = false;
+
+    // esperar a que vue muestre de neuvo el span 
+    await nextTick();
+
+    if (!due_dateEl.value) return;
+
+    // si no hay fecha m,sotramos sin fecha limite
+    if (!local.value.due_date) {
+        due_dateEl.value.innerText = "Sin fecha límite";
+        return;
+    }
+    
+    // si hay fecha -> formatearla
+    const formatted = new Date(local.value.due_date + "T00:00:00").toLocaleDateString(
+        'es-ES',
+        { day: 'numeric', month: 'long' }
+    );
+    due_dateEl.value.innerText = `Fecha límite: ${formatted}`;
+ }
 
 </script>
