@@ -67,7 +67,7 @@
 
         <!-- Footer -->
          <footer class="bg-white shadow-inner text-center p-4 text-sm text-gray-500">
-            © {{ currentYear }} TaskFlow. Software desarrolaldo por <b>Wilfer Bru</b>
+            © {{ currentYear }} TaskFlow. Software desarrollado por <b>Wilfer Bru</b>
          </footer>
     </div>
   </div>
