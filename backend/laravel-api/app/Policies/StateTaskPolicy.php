@@ -11,12 +11,12 @@ class StateTaskPolicy
 
     public function viewAny(User $user): bool
     {
-        return $user->role === "admin";
+        return true;
     }
 
     public function view(User $user, StateTask $stateTask): bool
     {
-        return $user->role === "admin";
+        return true;
     }
 
     public function create(User $user): bool
