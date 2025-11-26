@@ -82,7 +82,6 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 import UserIcon from '@/components/common/icons/UserIcon.vue';
-import { text } from 'stream/consumers';
 
 const currentYear = new Date().getFullYear(); // Año para el footer
 const authStore = useAuthStore();
