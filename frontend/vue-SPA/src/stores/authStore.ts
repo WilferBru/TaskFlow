@@ -95,6 +95,9 @@ export const useAuthStore = defineStore("auth", {
                     this.token = null;
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
+
+                    // Redirige y desmonta todo (evita los errores 401)
+                    window.location.href = "/login";
                 }else {
                     console.error("⚠️ El backend respondió pero no confirmó el cierre:", response);
                 }
