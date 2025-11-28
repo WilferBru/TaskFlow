@@ -20,33 +20,17 @@
 
       <!-- Fecha límite -->
       <div class="text-sm text-gray-400 select-none">
-
-        <!-- Si no estamos editando -->
-        <div class="cursor-pointer">
             Fecha límite:
             <span 
                 class="font-medium text-gray-700"
             >
                 {{ formattedDate }}
             </span>
-        </div>
-
-        <!-- Si estamos editando -->
-         <!-- <div v-else>
-            <input 
-                type="date"
-                v-model="localDate"
-                class="border px-2 py-1 rounded text-gray-700"
-                @blur="finishEditDate"
-                @keyup.enter="finishEditDate"
-            >
-         </div> -->
       </div>
 
       <!-- Título y estado -->
       <div class="flex items-center gap-4">
-        <h1 
-            ref="titleEl"
+        <h1
             class="text-2xl font-bold outline-none resize-none leading-tight wrap-break-word flex-1"
             :aria-label="'Titulo de la tarea' + (task.title ?? '')"            
         >
@@ -60,12 +44,33 @@
         </h3>
 
         <!-- Estado -->
-        <span
-          class="text-sm px-3 py-1.5 rounded-lg font-bold"
-          :class="stateColor"
-        >
-          {{ task.state }}
-        </span>
+        <div class="relative inline-block">
+          <div
+            class="text-sm px-3 py-1.5 rounded-lg font-bold cursor-pointer"
+            :class="stateColor"
+            @click="showDrop"
+          >
+            {{ task.state }}
+          </div>
+
+          <ul 
+            v-if="openDropdown"          
+            class="absolute right-0.5 mt-2 w-52 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
+          >
+            <li
+              v-for="s in stateTask.filter(st => st.id_state !== task?.id_state)" 
+              :key="s.id_state"
+            >              
+              <button
+                class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded"
+                @click="selectedState(task, s)"
+              >
+                {{ s.state }}
+              </button>
+            </li>
+          </ul>
+        </div>
+
       </div>
 
       <!-- Descripción -->
@@ -122,7 +127,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
 import taskService from '@/services/taskService';
 import { useAuthStore } from '@/stores/authStore';
-import { debounce } from 'lodash-es';
+import stateTaskService from '@/services/stateTaskService';
 
 interface TaskData {
   id_task: number;
@@ -148,20 +153,58 @@ const authStore = useAuthStore();
 const loading = ref(true);
 const task = ref<TaskData | null>(null);
 
+const stateTask = ref<{
+  id_state: number;
+  state: string;
+  level: number;
+}[]>([]);
 
+// dropdown para cambiar el estadod ela tarea
+const openDropdown = ref(false);
 
 onMounted(async () => {
   try {
-    const res = await taskService.show(taskId);
-    task.value = res.data;
+    const [resTask, resState] = await Promise.all([
+      taskService.show(taskId), // trer solo la tarea
+      stateTaskService.getAll(), // traer los estados
+    ]);
+
+    task.value = resTask.data;
+    stateTask.value = resState;
+
   } catch (e) {
-    console.error("Error cargando tarea", e);
+    console.error("Error al cargar datos", e);
   } finally {
     loading.value = false;
   }
 });
 
+// mostrar dropdown y actualizar estado de tareas
+const showDrop = () => {
+  openDropdown.value = !openDropdown.value
+}
 
+const selectedState = async (task: any, stateItem: any) => {
+  try {
+    await taskService.updateState({
+      id_task: task.id_task,
+      state_id: stateItem.id_state
+    });
+
+    // Actualizar en la UI
+    task.state = stateItem.state;
+    task.id_state = stateItem.id_state;
+    task.state_level = stateItem.level;
+
+    // cerrar el dropdown al actualizar
+    openDropdown.value = false;
+    
+  } catch (error) {
+    console.error("Error al actualizar estado: ", error);
+  }
+}
+
+// formato de fecha legible para la fecha limite
 const formattedDate = computed(() => {
   if (!task.value?.due_date) return "Sin fecha límite"
   return new Date(task.value.due_date).toLocaleDateString(
@@ -170,6 +213,7 @@ const formattedDate = computed(() => {
   );
 });
 
+// formato de fecha legible para created_at
 const createdAt = computed(() => {
   if (!task.value?.created_at) return ""
   return new Date(task.value.created_at).toLocaleDateString(
