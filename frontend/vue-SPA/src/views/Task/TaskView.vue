@@ -7,7 +7,7 @@
         ← Todas las tareas
       </RouterLink>
       <span class="text-gray-600">/</span>
-      <h2 class="text-gray-700 text-lg font-semibold">Detalles de tarea</h2>
+      <h2 class="text-gray-700 text-lg font-semibol">Detalles de tarea</h2>
     </div>
 
     <!-- Estado de carga -->
@@ -22,7 +22,8 @@
       <div class="text-sm text-gray-400 select-none">
             Fecha límite:
             <span 
-                class="font-medium text-gray-700"
+                class="font-medium"
+                :class="dueDateColor"
             >
                 {{ formattedDate }}
             </span>
@@ -38,13 +39,16 @@
         </h1>
         
         <h3
-            v-if="authStore.user?.role === 'admin'"
+            v-if="authStore.user?.role === 'admin' && authStore.user?.id_user !== task.user_id"
         >
-            Id del usuario: {{ task.user_id }}
+            Tarea del usuario: {{ task.user_id }}
         </h3>
 
         <!-- Estado -->
-        <div class="relative inline-block">
+        <div
+          v-if="task.user_id === authStore.user?.id_user"
+          class="relative inline-block"
+         >
           <div
             class="text-sm px-3 py-1.5 rounded-lg font-bold cursor-pointer"
             :class="stateColor"
@@ -153,6 +157,10 @@ const authStore = useAuthStore();
 const loading = ref(true);
 const task = ref<TaskData | null>(null);
 
+// mensaje de fecha limite segun su estado
+const dueDateMessage = ref("");
+const showDueDateMessage = ref(false);
+
 const stateTask = ref<{
   id_state: number;
   state: string;
@@ -222,11 +230,42 @@ const createdAt = computed(() => {
   );
 });
 
+// color de el estado segun el nivel
 const stateColor = computed(() => {
   const level = task.value?.state_level;
   if (level === 1) return "text-orange-500";
   if (level === 2) return "text-blue-500";
   if (level === 3) return "text-green-600";
+  return "text-gray-700";
+});
+
+// color de la fecha limite segun el estado de esta misma 
+const dueDateColor = computed(() => {
+  const state = task.value?.state_level;
+  const due_date = task.value?.due_date;
+  if (!due_date) return "text-gray-700";
+
+  const today = new Date();
+  const limit = new Date(due_date);
+
+  // normalizamos horas para comparar solo fechas
+  today.setHours(0, 0, 0, 0);
+  limit.setHours(0, 0, 0, 0);
+
+  if (today > limit) {
+    // fecha paso -> vencia
+    return "text-red-600"
+  }
+
+  if (today.getTime() === limit.getTime()) {
+    // Es hoy
+    return "text-amber-300"
+  }
+
+  if (state === 3) {
+    return "text-blue-300"
+  }
+
   return "text-gray-700";
 });
 
