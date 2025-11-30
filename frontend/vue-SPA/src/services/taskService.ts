@@ -67,4 +67,14 @@ export default {
             throw error;
         }
     },
+
+    async delete(id_task: number) {
+        try {
+            const response = await api.delete(`/tasks/${id_task}`);
+            return response.data;
+        } catch (error: any) {
+            console.log("Error al eliminar la tarea", error.response?.data || error.message);
+            throw error; 
+        }
+    },
 }

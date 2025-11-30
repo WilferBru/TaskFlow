@@ -11,22 +11,49 @@
     </div>
 
     <!-- Estado de carga -->
-    <div v-if="loading" class="p-8 bg-white text-gray-700 rounded-lg shadow">
+    <div v-if="loading" class="p-8 bg-info-content text-gray-100 rounded-lg shadow">
       Cargando tarea...
     </div>
 
     <!-- Vista principal -->
-    <div v-else-if="task" class="bg-white text-gray-700 rounded-lg shadow p-6 space-y-6">
+    <div v-else-if="task" class="bg-info-content text-gray-100 rounded-lg shadow p-6 space-y-6">
 
       <!-- Fecha límite -->
-      <div class="text-sm text-gray-400 select-none">
+      <div class="text-sm text-gray-300 select-none flex justify-between w-full">
+          <div>
             Fecha límite:
             <span 
                 class="font-medium"
-                :class="dueDateColor"
+                :class="dueDateInfo.color"
             >
-                {{ formattedDate }}
+                {{ formattedDate }} 
+                <span v-if="dueDateInfo.message">
+                  ({{ dueDateInfo.message }})
+                </span>
             </span>
+          </div>
+          <!-- boton para acciones de la tarea -->
+          <div class="relative">
+            <!-- Boton para editar y borrar -->
+            <OptionIcon
+              class="text-gray-50 w-6 h-6"
+            />
+            <!-- <ul          
+              class="absolute right-0.5 mt-2 w-30 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
+            >
+              <li
+                v-for="s in stateTask.filter(st => st.id_state !== task?.id_state)" 
+                :key="s.id_state"
+              >              
+                <button
+                  class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded"
+                  @click="selectedState(task, s)"
+                >
+                  {{ s.state }}
+                </button>
+              </li>
+            </ul> -->
+          </div>
       </div>
 
       <!-- Título y estado -->
@@ -59,14 +86,14 @@
 
           <ul 
             v-if="openDropdown"          
-            class="absolute right-0.5 mt-2 w-52 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
+            class="absolute right-0.5 mt-2 w-30 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
           >
             <li
               v-for="s in stateTask.filter(st => st.id_state !== task?.id_state)" 
               :key="s.id_state"
             >              
               <button
-                class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded"
+                class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded-box"
                 @click="selectedState(task, s)"
               >
                 {{ s.state }}
@@ -78,7 +105,7 @@
       </div>
 
       <!-- Descripción -->
-      <p class="text-gray-700 leading-relaxed whitespace-pre-line">
+      <p class="text-gray-100 leading-relaxed whitespace-pre-line">
         {{ task.description || 'Sin descripción' }}
       </p>
 
@@ -89,20 +116,41 @@
 
         <!-- Categoría -->
         <div>
-          <h3 class="text-sm text-gray-500">Categoría</h3>
-          <p class="font-medium">{{ task.category }}</p>
+          <h3 class="text-sm text-gray-300 flex items-center gap-1">
+            Categoría
+            <TagIcon
+              class="w-4 h4"
+            />
+          </h3>
+          <p class="font-medium mt-2">{{ task.category }}</p>
         </div>
 
         <!-- Prioridad -->
         <div>
-          <h3 class="text-sm text-gray-500">Prioridad</h3>
-          <p class="font-medium">{{ task.priority || 'Sin prioridad' }}</p>
+          <h3 class="text-sm text-gray-300 flex items-center gap-1">
+            Prioridad
+            <MegaphoneIcon 
+              class="w-4 h-4"
+            />
+          </h3>
+          <p 
+            class="font-medium mt-2"
+            :class="priorityColor"
+          >
+            {{ task.priority || 'Sin prioridad' }}
+          </p>
         </div>
 
         <!-- Metadata -->
         <div>
-          <h3 class="text-sm text-gray-500">Atributos</h3>
-          <div v-if="task.metadata.length">
+          <h3 class="text-sm text-gray-300 flex items-center gap-1"
+          >
+            Atributos
+            <SquareIcon 
+              class="w-4 h-4"
+            />
+          </h3>
+          <div v-if="task.metadata.length" class="mt-3 flex flex-wrap gap-2">
             <span
               v-for="(tag, i) in task.metadata"
               :key="i"
@@ -116,8 +164,14 @@
 
         <!-- Fecha de creación -->
         <div>
-          <h3 class="text-sm text-gray-500">Creada</h3>
-          <p class="font-medium">{{ createdAt }}</p>
+          <h3 class="text-sm text-gray-300 flex items-center gap-1"
+          >
+            Creada
+            <CalendarIcon
+              class="w-4 h-4"
+            />
+          </h3>
+          <p class="font-medium mt-3">{{ createdAt }}</p>
         </div>
 
       </div>
@@ -132,6 +186,11 @@ import { useRoute, RouterLink } from 'vue-router';
 import taskService from '@/services/taskService';
 import { useAuthStore } from '@/stores/authStore';
 import stateTaskService from '@/services/stateTaskService';
+import TagIcon from '@/components/common/icons/TagIcon.vue';
+import MegaphoneIcon from '@/components/common/icons/MegaphoneIcon.vue';
+import SquareIcon from '@/components/common/icons/SquareIcon.vue';
+import CalendarIcon from '@/components/common/icons/CalendarIcon.vue';
+import OptionIcon from '@/components/common/icons/OptionIcon.vue';
 
 interface TaskData {
   id_task: number;
@@ -156,10 +215,6 @@ const authStore = useAuthStore();
 
 const loading = ref(true);
 const task = ref<TaskData | null>(null);
-
-// mensaje de fecha limite segun su estado
-const dueDateMessage = ref("");
-const showDueDateMessage = ref(false);
 
 const stateTask = ref<{
   id_state: number;
@@ -233,17 +288,29 @@ const createdAt = computed(() => {
 // color de el estado segun el nivel
 const stateColor = computed(() => {
   const level = task.value?.state_level;
-  if (level === 1) return "text-orange-500";
-  if (level === 2) return "text-blue-500";
-  if (level === 3) return "text-green-600";
-  return "text-gray-700";
+  if (level === 1) return "bg-orange-500";
+  if (level === 2) return "bg-blue-500";
+  if (level === 3) return "bg-green-600";
+  return "text-gray-100";
+});
+
+// color de la prioridad
+const priorityColor = computed(() => {
+  const priority = task.value?.priority;
+  if (priority === "alta") return "text-red-500";
+  if (priority === "media") return "text-amber-500";
+  if (priority === "baja") return "text-green-500";
+  return "text-gray-100";
 });
 
 // color de la fecha limite segun el estado de esta misma 
-const dueDateColor = computed(() => {
+const dueDateInfo = computed(() => {
   const state = task.value?.state_level;
   const due_date = task.value?.due_date;
-  if (!due_date) return "text-gray-700";
+  if (!due_date) return {
+    color: "text-gray-200",
+    message: "",
+  };
 
   const today = new Date();
   const limit = new Date(due_date);
@@ -252,21 +319,33 @@ const dueDateColor = computed(() => {
   today.setHours(0, 0, 0, 0);
   limit.setHours(0, 0, 0, 0);
 
-  if (today > limit) {
-    // fecha paso -> vencia
-    return "text-red-600"
+  if (state === 3) {
+    return {
+      color: "text-green-500",
+      message: "Completado",
+    };
   }
 
   if (today.getTime() === limit.getTime()) {
     // Es hoy
-    return "text-amber-300"
+    return {
+      color: "text-amber-300",
+      message: "Vence Hoy"
+    };
   }
 
-  if (state === 3) {
-    return "text-blue-300"
+  if (today > limit) {
+    // fecha paso -> vencia
+    return {
+      color: "text-red-400",
+      message: "Vencida",
+    };
   }
 
-  return "text-gray-700";
+  return {
+    color: "text-gray-200",
+    message: "",
+  };
 });
 
 </script>
