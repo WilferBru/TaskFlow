@@ -12,11 +12,8 @@ class IndexTaskAction
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $query = Task::with(['category', 'stateTask'])->orderBy('id_task', 'desc');
-
-        if ($user->role === 'user') {
-            $query->where('user_id', $user->id_user);
-        }
+        $query = Task::with(['category', 'stateTask'])->where('user_id', $user->id_user)->orderBy('id_task', 'desc');
+        
 
         $tasks = $query->get();
 

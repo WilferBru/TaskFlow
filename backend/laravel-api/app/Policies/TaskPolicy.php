@@ -21,7 +21,7 @@ class TaskPolicy
 
     public function view(User $user, Task $task): bool
     {
-        return $user->id_user === $task->user_id || $user->role === 'admin';
+        return $user->id_user === $task->user_id;
     }
 
     public function create(User $user): bool

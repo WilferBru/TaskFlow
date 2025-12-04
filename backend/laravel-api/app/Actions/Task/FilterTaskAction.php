@@ -15,11 +15,8 @@ class FilterTaskAction
         $query = Task::with(['category', 'stateTask'])
             ->category($filterCategory)
             ->state($filterState)
-            ->search($filterSearch);
-
-        if ($user->role === 'user') {
-            $query->where('user_id', $user->id_user);
-        }
+            ->search($filterSearch)
+            ->where('user_id', $user->id_user);
 
         $tasks = $query->get();
 
