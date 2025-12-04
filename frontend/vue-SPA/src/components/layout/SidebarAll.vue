@@ -38,15 +38,12 @@
           >
         </div>
       </div>
-      <SelectSidebar />
-
     </div>
   </aside>
 </template>
 
 
 <script setup lang="ts">
-import SelectSidebar from './SelectSidebar.vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();

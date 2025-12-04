@@ -102,7 +102,7 @@
 import TagIcon from '@/components/common/icons/TagIcon.vue';
 import taskService from '@/services/taskService';
 import stateTaskService from '@/services/stateTaskService';
-import { onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useToast } from "vue-toastification";
 import { useAuthStore } from '@/stores/authStore';
 
@@ -111,6 +111,7 @@ const toast = useToast();
 const authStore = useAuthStore();
 
 const openDropdown = ref<number | null>(null);
+const openDropdownRef = ref<HTMLElement | null>(null);
 
 const tasks = ref<{
   id_task: number,
@@ -133,7 +134,20 @@ const state = ref<{
   level: number
 }[]>([]);
 
+const handleClickOutside = (event: MouseEvent) => {
+  // si el click está dentro de algún elemento con clase "dropdown", no hacemos nada
+  const clickedInsideDropdown = (event.target as HTMLElement).closest('.dropdown');
+  if (!clickedInsideDropdown) {
+    openDropdown.value = null; // cierra cualquier dropdown abierto
+  }
+};
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
 onMounted(async () => {
+  document.addEventListener('click', handleClickOutside); // cerrar drops al hjacer click afuera
     // Obtener las tareas
     try {
       const response = await taskService.getAll();

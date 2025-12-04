@@ -33,28 +33,46 @@
             </span>
           </div>
           <!-- boton para acciones de la tarea -->
-          <div class="relative">
+          <div class="relative" ref="dropActionRef">
             <!-- Boton para editar y borrar -->
             <OptionIcon
-              class="text-gray-50 w-6 h-6"
+              @click="openDropAction = !openDropAction"
+              class="text-gray-50 w-6 h-6 cursor-pointer"
             />
-            <!-- <ul          
-              class="absolute right-0.5 mt-2 w-30 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
+            <!-- DropDown -->
+            <ul  
+              v-if="openDropAction"        
+              class="absolute right-0.5 mt-2 w-20 bg-gray-100 dark:text-gray-800 rounded-box z-20 shadow-lg"
             >
-              <li
-                v-for="s in stateTask.filter(st => st.id_state !== task?.id_state)" 
-                :key="s.id_state"
-              >              
+              <!-- Editar -->
+              <li>              
                 <button
-                  class="w-full text-left px-4 py-2 hover:bg-gray-300 hover:text-black rounded"
-                  @click="selectedState(task, s)"
+                  class="w-full flex justify-center items-center text-center px-4 py-2"
                 >
-                  {{ s.state }}
+                  <EditIcon 
+                    class="bg-blue-500 text-gray-200 hover:bg-blue-600 w-9 h-7 p-1 rounded-full transition cursor-pointer"
+                  />
                 </button>
               </li>
-            </ul> -->
+              <!-- borrar -->
+              <li>              
+                <button
+                  onclick="deleteTaskModal.showModal()"
+                  class="w-full flex justify-center items-center text-center px-4 py-2 hover:text-black"
+                >
+                  <DeleteIcon 
+                    class="bg-red-500 text-gray-200 hover:bg-red-700 w-9 h-7 p-1 rounded-full transition cursor-pointer"
+                  />
+                </button>
+              </li>
+            </ul>
           </div>
       </div>
+
+      <DeleteTaskModel 
+        :id_task="task.id_task"
+        :title="task.title"
+      />
 
       <!-- Título y estado -->
       <div class="flex items-center gap-4">
@@ -74,12 +92,12 @@
         <!-- Estado -->
         <div
           v-if="task.user_id === authStore.user?.id_user"
-          class="relative inline-block"
+          class="relative inline-block" ref="dropdownRef"
          >
           <div
             class="text-sm px-3 py-1.5 rounded-lg font-bold cursor-pointer"
             :class="stateColor"
-            @click="showDrop"
+            @click="openDropdown = !openDropdown"
           >
             {{ task.state }}
           </div>
@@ -181,7 +199,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useRoute, RouterLink } from 'vue-router';
 import taskService from '@/services/taskService';
 import { useAuthStore } from '@/stores/authStore';
@@ -191,6 +209,9 @@ import MegaphoneIcon from '@/components/common/icons/MegaphoneIcon.vue';
 import SquareIcon from '@/components/common/icons/SquareIcon.vue';
 import CalendarIcon from '@/components/common/icons/CalendarIcon.vue';
 import OptionIcon from '@/components/common/icons/OptionIcon.vue';
+import EditIcon from '@/components/common/icons/EditIcon.vue';
+import DeleteIcon from '@/components/common/icons/DeleteIcon.vue';
+import DeleteTaskModel from '@/components/task/DeleteTaskModel.vue';
 
 interface TaskData {
   id_task: number;
@@ -225,7 +246,29 @@ const stateTask = ref<{
 // dropdown para cambiar el estadod ela tarea
 const openDropdown = ref(false);
 
+// dropdown para las acciones de la tarea (Editar y Borrar)
+const openDropAction = ref(false);
+
+// Referencia de drops apra cerrar al dar click por fuera
+const dropdownRef = ref<HTMLElement | null>(null);
+const dropActionRef = ref<HTMLElement | null>(null);
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+    openDropdown.value = false;
+  }
+  if (dropActionRef.value && !dropActionRef.value.contains(event.target as Node)) {
+    openDropAction.value = false;
+  }
+};
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
+
+
 onMounted(async () => {
+  document.addEventListener('click', handleClickOutside); // cerrar drops al hjacer click afuera
   try {
     const [resTask, resState] = await Promise.all([
       taskService.show(taskId), // trer solo la tarea
@@ -241,11 +284,6 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
-// mostrar dropdown y actualizar estado de tareas
-const showDrop = () => {
-  openDropdown.value = !openDropdown.value
-}
 
 const selectedState = async (task: any, stateItem: any) => {
   try {
@@ -266,6 +304,7 @@ const selectedState = async (task: any, stateItem: any) => {
     console.error("Error al actualizar estado: ", error);
   }
 }
+
 
 // formato de fecha legible para la fecha limite
 const formattedDate = computed(() => {
