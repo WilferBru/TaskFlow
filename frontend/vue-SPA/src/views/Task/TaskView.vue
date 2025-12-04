@@ -46,13 +46,14 @@
             >
               <!-- Editar -->
               <li>              
-                <button
+                <RouterLink
+                  :to="{ name: 'edit_task', params: { id_task: task.id_task } }"
                   class="w-full flex justify-center items-center text-center px-4 py-2"
                 >
-                  <EditIcon 
+                  <EditIcon
                     class="bg-blue-500 text-gray-200 hover:bg-blue-600 w-9 h-7 p-1 rounded-full transition cursor-pointer"
                   />
-                </button>
+                </RouterLink>
               </li>
               <!-- borrar -->
               <li>              
@@ -308,20 +309,41 @@ const selectedState = async (task: any, stateItem: any) => {
 
 // formato de fecha legible para la fecha limite
 const formattedDate = computed(() => {
-  if (!task.value?.due_date) return "Sin fecha límite"
-  return new Date(task.value.due_date).toLocaleDateString(
-    "es-ES",
-    { day: "numeric", month: "long" }
-  );
+  const due = task.value?.due_date; // ← VARIABLE LOCAL SEGURA
+  if (!due) return "Sin fecha límite";
+
+  const dateOnly = due.split("T")[0];
+  const parts = dateOnly.split("-");
+
+  if (parts.length !== 3) return "Fecha inválida";
+
+  const [year, month, day] = parts;
+
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  return date.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long"
+  });
 });
+
+
 
 // formato de fecha legible para created_at
 const createdAt = computed(() => {
   if (!task.value?.created_at) return ""
-  return new Date(task.value.created_at).toLocaleDateString(
-    "es-ES",
-    { day: "numeric", month: "long", year: "numeric" }
-  );
+  
+  // Separar fecha de la hora si existe
+  const dateOnly = task.value.created_at.split("T")[0];
+
+  const [year, month, day] = dateOnly.split("-");
+
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  return date.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long"
+  });
 });
 
 // color de el estado segun el nivel

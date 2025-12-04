@@ -37,11 +37,11 @@
                     </div>
         
                     <div class="flex mt-7 items-center text-center">
-                        <hr class="border-gray-300 border-1 w-60 rounded-md">
+                        <hr class="border-gray-300 w-60 rounded-md">
                         <label class="block font-medium text-sm text-gray-600 w-full">
                             ¿Eres nuevo?
                         </label>
-                        <hr class="border-gray-300 border-1 w-60 rounded-md">
+                        <hr class="border-gray-300 w-60 rounded-md">
                     </div>
         
                         <div class="mt-7">

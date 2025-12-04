@@ -55,6 +55,13 @@ const router = createRouter({
           component: CreareTaskView,
           meta: { requiresAuth: true },
         },
+        // editar taarea
+        {
+          path: 'tarea/:id_task/editar',
+          name: 'edit_task',
+          component: CreareTaskView,
+          meta: { requiresAuth: true },
+        },
         {
           path: 'perfil',
           name: 'profile',

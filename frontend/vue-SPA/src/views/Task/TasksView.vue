@@ -58,7 +58,7 @@
               class="flex items-center gap-x-2">
               <div>
                 <h3 class="text-2xl font-bold text-gray-50">{{ t.title }}</h3>
-                <span class="text-xs text-gray-300" v-if="t.due_date"><b>Fecha limite:</b> {{ new Date(t.due_date).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }) }}</span>
+                <span class="text-xs text-gray-300" v-if="t.due_date"><b>Fecha limite:</b> {{ formatDueDate(t.due_date) }}</span>
                 <span class="text-xs text-gray-300" v-else><b>Sin fecha limite</b></span>
               </div>
             </div>
@@ -111,7 +111,37 @@ const toast = useToast();
 const authStore = useAuthStore();
 
 const openDropdown = ref<number | null>(null);
-const openDropdownRef = ref<HTMLElement | null>(null);
+
+function formatDueDate(due: string | Date | null | undefined): string {
+  if (!due) return "Sin fecha límite";
+
+  let dateOnly = "";
+
+  // Si viene como Date: extraer manual YYYY-MM-DD
+  if (due instanceof Date) {
+    const y = due.getFullYear();
+    const m = String(due.getMonth() + 1).padStart(2, "0");
+    const d = String(due.getDate()).padStart(2, "0");
+    dateOnly = `${y}-${m}-${d}`;
+  } else {
+    // Si viene en string
+    dateOnly = due.split("T")[0] ?? due;
+  }
+
+  const parts = dateOnly.split("-");
+  if (parts.length !== 3) return "Sin fecha límite";
+
+  const [year, month, day] = parts;
+
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+
+  return date.toLocaleDateString("es-ES", {
+    day: "numeric",
+    month: "long",
+  });
+}
+
+
 
 const tasks = ref<{
   id_task: number,

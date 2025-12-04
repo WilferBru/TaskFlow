@@ -159,10 +159,15 @@ import taskService from '@/services/taskService';
 import categoryService from '@/services/categoryService';
 import stateTaskService from '@/services/stateTaskService';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const toast = useToast();
 
 const router = useRouter();
+
+// datos d ela tarea
+const route = useRoute();
+const taskId = Number(route.params.id_task); // obtneer el id por la url
 
 const title = ref("");
 const category = ref("");
@@ -186,7 +191,47 @@ const categories = ref<{ id_category:number, category: string }[]>([]); // Array
 
 const states_tasks = ref<{ id_state:number, state: string }[]>([]); // Array de estado de tareas
 
+watch(
+    () => route.params.id_task,
+    (newValue) => {
+        const id = Number(newValue);
+
+        if (!id) {
+            // Si NO hay id_task estamos en modo CREAR
+            title.value = "";
+            category.value = "";
+            stateTask.value = "";
+            priority.value = "";
+            due_date.value = "";
+            metadata.value = [];
+            description.value = "";
+        }
+    },
+    { immediate: true }
+);
+
 onMounted( async () => {
+    // si existe un id_task editamos
+    if (taskId) {
+        try {
+            const res = await taskService.show(taskId);
+            const t = res.data;
+            // llenamos los campos del form
+            title.value = t.title ?? "";
+            category.value = t.category_id?.toString() ?? "";
+            stateTask.value = t.state_id?.toString() ?? "";
+            priority.value = t.priority ?? "";
+            if (t.due_date) {
+                due_date.value = t.due_date.split("T")[0];
+            } else {
+                due_date.value = "";
+            }
+            metadata.value = [...(t.metadata ?? [])];
+            description.value = t.description ?? "";
+        } catch (error) {
+            console.error("❌ Error cargando la tarea a editar:", error);
+        }
+    }
     try {
         categories.value = await categoryService.getAll();
     } catch (err) {
@@ -248,8 +293,7 @@ const saveTask = async () => {
         return;
     }
 
-    try {
-        const payload = {
+    const payload = {
         title: title.value,
         category_id: category.value,
         state_id: stateTask.value,
@@ -257,15 +301,33 @@ const saveTask = async () => {
         due_date: due_date.value,
         metadata: metadata.value,
         description: description.value, 
-        };
+    };
 
-        await taskService.create(payload);
-        // console.log(payload);
-        toast.success("Tarea creada correctamente");
-        router.push({ name: 'task' });
-    } catch (error) {
-        console.error("❌ Error creando tarea:", error);
+    // si la props task no esta vacia entonces se actauliza de lo contario se crea
+    if (taskId) {
+        // actualizamos
+        try {         
+
+            await taskService.update(taskId, payload);
+
+            toast.success("Tarea actualizada correctamente");
+            router.push({ name: 'task.show', params: { id_task: taskId} });
+
+        } catch (error) {
+            console.error("❌ Error al actualizar la tarea:", error);
+        }
+    } else {
+        // creamos
+        try {
+            await taskService.create(payload);
+            // console.log(payload);
+            toast.success("Tarea creada correctamente");
+            router.push({ name: 'task' });
+        } catch (error) {
+            console.error("❌ Error creando tarea:", error);
+        }
     }
+    
 }
 
 </script>
