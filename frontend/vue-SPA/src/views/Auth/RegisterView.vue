@@ -19,7 +19,7 @@
                             type="text" 
                             id="register"
                             placeholder="Nombre y Apellido" 
-                            class="mt-1 pl-6 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                            class="mt-1 pl-6 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
                         >
                     </div>
                     
@@ -28,7 +28,7 @@
                             v-model="email"
                             type="email" 
                             placeholder="Correo Electronico" 
-                            class="mt-1 pl-6 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                            class="mt-1 pl-6 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
                         >
                     </div>
         
@@ -37,7 +37,7 @@
                             v-model="password"
                             type="password" 
                             placeholder="Contraseña" 
-                            class="mt-1 pl-5 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                            class="mt-1 pl-5 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
                         >                           
                     </div>
                     
@@ -46,7 +46,7 @@
                             v-model="password_confirmation"
                             type="password" 
                             placeholder="Confirma Tu Contraseña" 
-                            class="mt-1 pl-5 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
+                            class="mt-1 pl-5 block w-full border-none bg-gray-300 placeholder-gray-700 text-gray-800 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition"
                         >                           
                     </div>
         
@@ -59,11 +59,11 @@
                     </div>
         
                     <div class="flex mt-7 items-center text-center">
-                        <hr class="border-gray-300 border-1 w-40 rounded-md">
+                        <hr class="border-gray-300 w-40 rounded-md">
                         <label class="block font-medium text-sm text-gray-600 w-full">
                             ¿Ya tienes una cuenta?
                         </label>
-                        <hr class="border-gray-300 border-1 w-40 rounded-md">
+                        <hr class="border-gray-300 w-40 rounded-md">
                     </div>
         
                         <div class="mt-7">
@@ -106,7 +106,7 @@ const handleRegister = async () => {
         return;
     }
     try {
-        const response = await authStore.register(name.value, email.value, password.value, password_confirmation.value);
+        await authStore.register(name.value, email.value, password.value, password_confirmation.value);
 
         if (authStore.token) {
             toast.success("Bienvenido");
