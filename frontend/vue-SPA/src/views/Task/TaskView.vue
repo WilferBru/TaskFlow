@@ -56,11 +56,11 @@
               </li>
               <!-- borrar -->
               <li>              
-                <button
-                  onclick="deleteTaskModal.showModal()"
+                <button                  
                   class="w-full flex justify-center items-center text-center px-4 py-2 hover:text-black"
                 >
                   <DeleteIcon 
+                    onclick="deleteTaskModal.showModal()"
                     class="bg-red-500 text-gray-200 hover:bg-red-700 w-9 h-7 p-1 rounded-full transition cursor-pointer"
                   />
                 </button>
