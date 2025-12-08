@@ -310,9 +310,9 @@ const selectedState = async (task: any, stateItem: any) => {
 // formato de fecha legible para la fecha limite
 const formattedDate = computed(() => {
   const due = task.value?.due_date; // ← VARIABLE LOCAL SEGURA
-  if (!due) return "Sin fecha límite";
+  if (!due) return "-";
 
-  const dateOnly = due.split("T")[0];
+  const dateOnly = due.split("T")[0] ?? "";
   const parts = dateOnly.split("-");
 
   if (parts.length !== 3) return "Fecha inválida";
@@ -334,7 +334,7 @@ const createdAt = computed(() => {
   if (!task.value?.created_at) return ""
   
   // Separar fecha de la hora si existe
-  const dateOnly = task.value.created_at.split("T")[0];
+  const dateOnly = task.value.created_at.split("T")[0] ?? "";
 
   const [year, month, day] = dateOnly.split("-");
 

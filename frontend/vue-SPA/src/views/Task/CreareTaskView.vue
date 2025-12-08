@@ -1,9 +1,15 @@
 <template>
   <div class="bg-gray-200 rounded-2xl p-8 shadow-2xl">
-    <h1 class="text-black font-bold text-2xl text-center">Crea una tarea ✍️</h1>
+    <h1 class="text-black font-bold text-2xl text-center">
+        {{ editTextView ? (title ? `Editar Tarea: ${title}` : "Editar Tarea") : "Crea una tarea" }} ✍️
+    </h1>
     <p class="font-sans text-black mt-4 text-center">
-        Crea las tareas que necesites y ordenalas por categorias o estados de avance, 
-        puedes crear hast 10 atributos por tarea.
+        {{ 
+            editTextView ? 
+            ""
+            :
+            "Crea las tareas que necesites y ordenalas por categorias o estados de avance, puedes crear hast 10 atributos por tarea."
+        }}        
     </p>
     <div class="mt-9">
         <label class="block text-black text-sm font-medium mb-2">
@@ -99,7 +105,7 @@
         
         <div>
         <label class="block text-black text-sm font-medium mb-2">
-            Fecha de vencimiento
+            Fecha de vencimiento (No puede ser anterior a hoy)
         </label>
         <input
             v-model="due_date"
@@ -145,7 +151,11 @@
         @click="saveTask"
         class="dark:bg-black px-4 py-2 rounded-3xl text-gray-50 hover:bg-gray-600 hover:text-shadow-gray-600"
         >
-            Crear
+            {{ 
+                editTextView ?
+                "Actualizar" :
+                "Crear"
+            }}
         </button>
     </div>
 </div>
@@ -164,6 +174,9 @@ import { useRoute } from 'vue-router';
 const toast = useToast();
 
 const router = useRouter();
+
+// editar texto segun vista (editar o crear)
+const editTextView = ref(false);
 
 // datos d ela tarea
 const route = useRoute();
@@ -195,7 +208,7 @@ watch(
     () => route.params.id_task,
     (newValue) => {
         const id = Number(newValue);
-
+        editTextView.value = Boolean(id); // modo editar o crear
         if (!id) {
             // Si NO hay id_task estamos en modo CREAR
             title.value = "";
