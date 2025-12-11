@@ -38,7 +38,7 @@
           >
         </div>
       </div>
-      <div class="flex-grow overflow-y-auto px-6 pb-6">
+      <div class="grow overflow-y-auto px-6 pb-6">
 
         <!-- ACCIONES RÁPIDAS -->
         <div class="mt-2">
