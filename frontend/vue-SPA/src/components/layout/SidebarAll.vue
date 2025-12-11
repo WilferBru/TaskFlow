@@ -38,13 +38,107 @@
           >
         </div>
       </div>
+      <div class="flex-grow overflow-y-auto px-6 pb-6">
+
+        <!-- ACCIONES RÁPIDAS -->
+        <div class="mt-2">
+          <h2 class="text-lg font-bold text-gray-800 mb-3">Acciones Rápidas</h2>
+
+          <RouterLink
+            to="/"
+            class="block w-full bg-emerald-500 text-gray-200 text-center py-2 rounded-xl mb-3 hover:bg-emerald-600 hover:text-gray-200 transition"
+          >
+            👍​ Ver tareas completadas
+          </RouterLink>
+          
+          <RouterLink
+            to="/"
+            class="block w-full bg-blue-400 text-gray-200 text-center py-2 rounded-xl mb-3 hover:bg-blue-500 hover:text-gray-200 transition"
+          >
+            ⚡ Ver tareas en proceso
+          </RouterLink>
+
+          <RouterLink
+            to="/"
+            class="block w-full bg-amber-200 text-gray-600 text-center py-2 rounded-xl hover:bg-amber-400 hover:text-gray-600 transition"
+          >
+            ⏳ Ver tareas pendientes
+          </RouterLink>
+        </div>
+
+        <!-- RESUMEN -->
+        <div class="mt-8">
+          <h2 class="text-lg font-bold text-gray-800 mb-4">Resumen de tareas</h2>
+
+          <div class="space-y-2">
+
+            <p class="flex justify-between">
+              <span class="text-gray-600">📝 Total:</span>
+              <span class="font-bold text-gray-900">{{ summaryTaskStore.total }}</span>
+            </p>
+
+            <p class="flex justify-between">
+              <span class="text-red-600">🔥 Alta:</span>
+              <span class="font-bold text-red-700">{{ summaryTaskStore.alta }}</span>
+            </p>
+
+            <p class="flex justify-between">
+              <span class="text-yellow-600">⚠️ Media:</span>
+              <span class="font-bold text-yellow-700">{{ summaryTaskStore.media }}</span>
+            </p>
+
+            <p class="flex justify-between">
+              <span class="text-green-600">🟢 Baja:</span>
+              <span class="font-bold text-green-700">{{ summaryTaskStore.baja }}</span>
+            </p>
+
+          </div>
+        </div>
+
+        <!-- TIP -->
+        <div class="mt-10 bg-gray-300 rounded-xl p-4 text-gray-700 text-sm italic">
+          💡 {{ randomTip }}
+        </div>
+
+      </div>
+
     </div>
   </aside>
 </template>
 
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
 
+const summaryTaskStore = useTaskSummaryStore();
 const route = useRoute();
+const randomTip = ref<string>("");
+
+// concejo 
+const tips = [
+  "Organiza tu día creando primero tus tareas más importantes.",
+  "Toma descansos cortos para mantener tu productividad alta.",
+  "Revisa tus tareas pendientes antes de comenzar el día.",
+  "No acumules tareas: completa las rápidas en menos de 2 minutos.",
+  "Usa el filtro de búsqueda para encontrar tus tareas por estado, categoría o título.",
+  "Recuerda que puedes crear hasta 10 atributos por tarea y editarlos o eliminarlos cuando quieras.",
+  "No olvides cambiar el estado de tus tareas para evitar información desactualizada.",
+  "Ten siempre en cuenta las fechas límite, especialmente en tareas de alta prioridad.",
+];
+
+onMounted(() => {
+  // resumen de las tareas
+  summaryTaskStore.loadSummary();
+  // Tip inicial
+  randomTip.value = tips[Math.floor(Math.random() * tips.length)]!;
+
+  // Cambiar cada 5 min (300000 ms)
+  setInterval(() => {
+    randomTip.value = tips[Math.floor(Math.random() * tips.length)]!;
+  }, 300000);
+});
+
+
 </script>

@@ -25,6 +25,16 @@ export default {
             throw error;
         }
     },
+
+    async summary() {
+        try {
+            const res = await api.get('/tasks/summary');
+            return res.data;
+        } catch (error: any) {
+            console.log("Error al obtener el conteo de las tareas", error.response?.data || error.message);
+            throw error;
+        }
+    },
     
     async show(id_task: number) {
         try {

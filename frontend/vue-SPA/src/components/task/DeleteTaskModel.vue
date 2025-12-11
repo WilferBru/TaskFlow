@@ -27,9 +27,11 @@
 import taskService from '@/services/taskService';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
+import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
 
 const toast = useToast();
 const router = useRouter();
+const taskSummaryStore = useTaskSummaryStore();
 
 
 const props = defineProps<{
@@ -49,6 +51,7 @@ const deleteTask = async () => {
         closeModal();
         toast.success("Tarea eliminada correctamente");
         router.push({ name: 'task' });
+        taskSummaryStore.loadSummary()
     } catch (error) {
         console.error("Error al eliminar la tarea: ", error);
     }    

@@ -170,9 +170,10 @@ import categoryService from '@/services/categoryService';
 import stateTaskService from '@/services/stateTaskService';
 import { useRouter } from 'vue-router';
 import { useRoute } from 'vue-router';
+import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
 
 const toast = useToast();
-
+const taskSumaryStore = useTaskSummaryStore(); // cargar el resumen de tareas
 const router = useRouter();
 
 // editar texto segun vista (editar o crear)
@@ -325,6 +326,7 @@ const saveTask = async () => {
 
             toast.success("Tarea actualizada correctamente");
             router.push({ name: 'task.show', params: { id_task: taskId} });
+            taskSumaryStore.loadSummary();
 
         } catch (error) {
             console.error("❌ Error al actualizar la tarea:", error);
@@ -336,6 +338,7 @@ const saveTask = async () => {
             // console.log(payload);
             toast.success("Tarea creada correctamente");
             router.push({ name: 'task' });
+            taskSumaryStore.loadSummary();
         } catch (error) {
             console.error("❌ Error creando tarea:", error);
         }

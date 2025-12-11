@@ -213,6 +213,7 @@ import OptionIcon from '@/components/common/icons/OptionIcon.vue';
 import EditIcon from '@/components/common/icons/EditIcon.vue';
 import DeleteIcon from '@/components/common/icons/DeleteIcon.vue';
 import DeleteTaskModel from '@/components/task/DeleteTaskModel.vue';
+import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
 
 interface TaskData {
   id_task: number;
@@ -232,7 +233,7 @@ interface TaskData {
 
 const route = useRoute();
 const taskId = Number(route.params.id_task);
-
+const taskSummaryStore = useTaskSummaryStore();
 const authStore = useAuthStore();
 
 const loading = ref(true);
