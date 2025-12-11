@@ -14,6 +14,11 @@ class TaskPolicy
         return true;
     }
 
+    public function summary(User $user): bool
+    {
+        return true;
+    }
+
     public function filter(User $user): bool
     {
         return true;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Task\CountTaskAction;
 use App\Actions\Task\DeleteTaskAction;
 use App\Actions\Task\FilterTaskAction;
 use App\Actions\Task\IndexTaskAction;
@@ -42,6 +43,28 @@ class TaskController extends Controller
         } catch (\Throwable $e) {
             return apiResponse::error(
                 'Error al obtener las tareas',
+                $e,
+                JsonResponse::HTTP_BAD_REQUEST
+            );
+        }
+    }
+
+    public function summary(CountTaskAction $countTask)
+    {
+        $this->authorize('summary', Task::class);
+
+        try {
+
+            $task = $countTask->execute();
+
+            return apiResponse::success(
+                $task,
+                'Conteo de tareas obtenido correctamente',
+                JsonResponse::HTTP_OK
+            );
+        } catch (\Throwable $e) {
+            return apiResponse::error(
+                'Error al obtener el conteo de tareas',
                 $e,
                 JsonResponse::HTTP_BAD_REQUEST
             );
