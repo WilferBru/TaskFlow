@@ -6,7 +6,7 @@ import HomeView from "@/views/HomeView.vue";
 //tareas
 import TasksView from "@/views/Task/TasksView.vue";
 import TaskView from '@/views/Task/TaskView.vue';
-import CreareTaskView from '@/views/Task/CreareTaskView.vue';
+import CreareTaskView from '@/views/Task/CreateTaskView.vue';
 //user
 import ProfileView from "@/views/ProfileView.vue";
 

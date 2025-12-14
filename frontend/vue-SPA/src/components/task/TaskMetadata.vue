@@ -49,9 +49,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, defineEmits, defineProps } from 'vue'
+import { ref, watch} from 'vue'
 
 const emit = defineEmits(['update:modelValue'])
+
+const syncingFromParent = ref(false); // control para identificar de donde viene el cambio (si es el padre o hijo)
 
 const props = defineProps({
   modelValue: {
@@ -68,16 +70,45 @@ const attributes = ref<{ key: string; value: string }[]>(
   })
 )
 
+// Sincroniza los datos que vienen del padre (ej: al editar una tarea)
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    // Indicamos que el cambio viene del padre (no del usuario)
+    syncingFromParent.value = true;
+
+    attributes.value = newVal.map((attr) => {
+      const [key, value] = attr.split(':').map((s) => s.trim());
+      return { key: key || '', value: value || '' };
+    });
+
+    // Finalizamos la sincronizacion del padre
+    syncingFromParent.value = false;
+  },
+  { immediate: true } // mostramos en el componente
+);
+
+
+
 // cada vez que cambia algo, actualizamos el array de strings "key: value"
 watch(
   attributes,
   (newVal) => {
+    if (syncingFromParent.value) return; // si el cambio viene del padre no devuelvas
     const formatted = newVal
       .filter((a) => a.key && a.value)
       .map((a) => `${a.key}: ${a.value}`);
+    // evitar emitir al padre si el valor no cambio realmente (prevenir bucles infinitos)
+    const isSame =
+      formatted.length === props.modelValue.length &&
+      formatted.every((v, i) => v === props.modelValue[i]);
+
+    if (isSame) return;
+
     emit('update:modelValue', formatted);
+
   },
-  { deep: true }
+  { deep: true }  // Necesario para detectar cambios que se hacen en los atributos (key / value)
 )
 
 // agregar atributo vacío

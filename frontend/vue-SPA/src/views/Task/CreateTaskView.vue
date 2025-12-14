@@ -119,9 +119,12 @@
     </div>  
 
     <div class="mt-6">
-        <label class="block text-black text-lg font-medium mb-2">
+        <label class="block text-black text-lg font-medium mb-1">
             Atributos de tu tarea
         </label>
+        <p class="text-sm text-gray-500 mb-2">
+            Cada atributo debe tener una sola palabra como valor
+        </p>
         <TaskMetadata v-model="metadata"/>
     </div>
 
