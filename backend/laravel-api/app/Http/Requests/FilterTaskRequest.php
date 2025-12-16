@@ -17,6 +17,7 @@ class FilterTaskRequest extends FormRequest
         return [
             'category_id' => 'nullable|string',
             'state_id'    => 'nullable|string',
+            'priority'    => 'nullable|string',
             'keyword'     => 'nullable|string',
         ];
     }

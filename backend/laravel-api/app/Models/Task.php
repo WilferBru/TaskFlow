@@ -67,6 +67,16 @@ class Task extends Model
 
         return $query;
     }
+    
+    // Filtro por prioridad
+    public function scopePriority($query, $priority)
+    {
+        if ($priority) {
+            return $query->where('priority', $priority);
+        }
+
+        return $query;
+    }
 
     // Busqueda por palabra clave (title o descripción)
     public function scopeSearch($query, $keyword)

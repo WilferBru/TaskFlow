@@ -81,7 +81,8 @@ class TaskController extends Controller
             $tasks = $filterTask->execute(
                 $filterTaskRequest->category_id,
                 $filterTaskRequest->state_id,
-                $filterTaskRequest->keyword
+                $filterTaskRequest->keyword,
+                $filterTaskRequest->priority
             );
 
             if ($tasks->isEmpty()) {

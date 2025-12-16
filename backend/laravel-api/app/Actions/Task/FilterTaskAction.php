@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class FilterTaskAction
 {
-    public function execute($filterCategory, $filterState, $filterSearch)
+    public function execute($filterCategory, $filterState, $filterSearch, $filterPriority)
     {
         //** @var \App\Models\User $user */
         $user = Auth::user();
@@ -15,6 +15,7 @@ class FilterTaskAction
         $query = Task::with(['category', 'stateTask'])
             ->category($filterCategory)
             ->state($filterState)
+            ->priority($filterPriority)
             ->search($filterSearch)
             ->where('user_id', $user->id_user);
 
