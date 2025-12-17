@@ -13,15 +13,26 @@ interface TaskPayload {
 interface UpdateState {
     id_task: number;
     state_id: number;
-}
-
+};
 export default {
     async getAll() {
         try {
             const response = await api.get('/tasks');
-            return response.data;
+            return response.data.data;
         } catch (error: any) {
-            console.log("Error al obtener las tareas", error.response?.data || error.message);
+            console.error("Error al obtener las tareas", error.response?.data || error.message);
+            throw error;
+        }
+    },
+
+    async filter(filters: { category_id?: number | null; state_id?: number | null; priority?: string | null; keyword?: string | null }) {
+        try {
+            const res = await api.get('/tasks/filter', {
+                params: filters
+            });
+            return res.data.data;
+        } catch (error: any) {
+            console.error("Error al realizar la busqueda de la tarea", error.response?.data || error.message);
             throw error;
         }
     },
@@ -31,7 +42,7 @@ export default {
             const res = await api.get('/tasks/summary');
             return res.data;
         } catch (error: any) {
-            console.log("Error al obtener el conteo de las tareas", error.response?.data || error.message);
+            console.error("Error al obtener el conteo de las tareas", error.response?.data || error.message);
             throw error;
         }
     },
@@ -41,7 +52,7 @@ export default {
             const response = await api.get(`/tasks/${id_task}`);
             return response.data;
         } catch (error: any) {
-            console.log("Error al obtener la tarea", error.response?.data || error.message);
+            console.error("Error al obtener la tarea", error.response?.data || error.message);
             throw error;
         }
     },
@@ -51,7 +62,7 @@ export default {
             const response = await api.post("/tasks", data);
             return response.data;
         } catch (error: any) {
-            console.log("Error al crear la tarea", error.response?.data || error.message);
+            console.error("Error al crear la tarea", error.response?.data || error.message);
             throw error;
         }
     },
@@ -63,7 +74,7 @@ export default {
             });
             return response.data;
         } catch (error: any) {
-            console.log("Error al actualizar el estado de la tarea", error.response?.data || error.message);
+            console.error("Error al actualizar el estado de la tarea", error.response?.data || error.message);
             throw error;
         }
     },
@@ -73,7 +84,7 @@ export default {
             const response = await api.put(`/tasks/${id_task}`, data);
             return response.data;
         } catch (error: any) {
-            console.log("Error al actualizar la tarea", error.response?.data || error.message);
+            console.error("Error al actualizar la tarea", error.response?.data || error.message);
             throw error;
         }
     },
@@ -83,7 +94,7 @@ export default {
             const response = await api.delete(`/tasks/${id_task}`);
             return response.data;
         } catch (error: any) {
-            console.log("Error al eliminar la tarea", error.response?.data || error.message);
+            console.error("Error al eliminar la tarea", error.response?.data || error.message);
             throw error; 
         }
     },

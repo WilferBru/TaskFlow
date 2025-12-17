@@ -110,13 +110,16 @@
 import TagIcon from '@/components/common/icons/TagIcon.vue';
 import taskService from '@/services/taskService';
 import stateTaskService from '@/services/stateTaskService';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, computed } from 'vue';
 import { useToast } from "vue-toastification";
 import { useAuthStore } from '@/stores/authStore';
+import { useTaskStore } from '@/stores/taskStore';
 
 const toast = useToast();
 
 const authStore = useAuthStore();
+
+const taskStore = useTaskStore(); // tareas del store
 
 const openDropdown = ref<number | null>(null);
 
@@ -149,20 +152,7 @@ function formatDueDate(due: string | Date | null | undefined): string {
   });
 }
 
-const tasks = ref<{
-  id_task: number,
-  title: string,
-  user_id: number,
-  due_date: Date,
-  priority: string,
-  id_category: number,
-  category: string,
-  id_state: number,
-  state: string,
-  state_level: number,
-  description: Text,
-  metadata: string
-}[]>([]);
+const tasks = computed(() => taskStore.tasks);
 
 const state = ref<{
   id_state: number,
@@ -184,21 +174,17 @@ onBeforeUnmount(() => {
 
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside); // cerrar drops al hjacer click afuera
-    // Obtener las tareas
-    try {
-      const response = await taskService.getAll();
-      tasks.value = response.data;
-    } catch (error) {
-      console.error("Error cargando tareas:", error); 
-    }
+
+  // Obtener las tareas
+  await taskStore.loadTask(); // carga desde pinia
     
-    // obtner los estados de tareas
-    try {
-      const response = await stateTaskService.getAll();
-      state.value = response;
-    } catch (error) {
-      console.error("Error cargando estado de tareas: ", error); 
-    }
+  // obtner los estados de tareas
+  try {
+    const response = await stateTaskService.getAll();
+    state.value = response;
+  } catch (error) {
+    console.error("Error cargando estado de tareas: ", error); 
+  }
 });
 
 const selectedState = async (task: any, stateItem: any) => {

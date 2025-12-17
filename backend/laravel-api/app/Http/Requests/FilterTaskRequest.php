@@ -15,8 +15,8 @@ class FilterTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'category_id' => 'nullable|string',
-            'state_id'    => 'nullable|string',
+            'category_id' => 'nullable|integer',
+            'state_id'    => 'nullable|integer',
             'priority'    => 'nullable|string',
             'keyword'     => 'nullable|string',
         ];

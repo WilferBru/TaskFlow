@@ -40,16 +40,16 @@
       </div>
       <div class="grow overflow-y-auto px-6 pb-6">
 
-        <!-- ACCIONES RÁPIDAS -->
+        <!-- Filtros -->
         <div class="mt-2">
-          <h2 class="text-lg font-bold text-gray-800 mb-3">Acciones Rápidas</h2>
+          <h2 class="text-lg font-bold text-gray-800 mb-3">Filtrar Tareas</h2>
 
-          <RouterLink
-            to="/"
+          <button
             class="block w-full bg-emerald-500 text-gray-200 text-center py-2 rounded-xl mb-3 hover:bg-emerald-600 hover:text-gray-200 transition"
+            popovertarget="popover-1" style="anchor-name:--anchor-1"
           >
             👍​ Ver tareas completadas
-          </RouterLink>
+          </button>
           
           <RouterLink
             to="/"

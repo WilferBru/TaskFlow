@@ -51,7 +51,7 @@ class Task extends Model
     // Filtro por categoria
     public function scopeCategory($query, $categoryId)
     {
-        if ($categoryId) {
+        if (filled($categoryId)) {
             return $query->where('category_id', $categoryId);
         }
 
@@ -61,7 +61,7 @@ class Task extends Model
     // Filtro por estado
     public function scopeState($query, $stateId)
     {
-        if ($stateId) {
+        if (filled($stateId)) {
             return $query->where('state_id', $stateId);
         }
 
@@ -71,7 +71,7 @@ class Task extends Model
     // Filtro por prioridad
     public function scopePriority($query, $priority)
     {
-        if ($priority) {
+        if (filled($priority)) {
             return $query->where('priority', $priority);
         }
 
@@ -81,7 +81,7 @@ class Task extends Model
     // Busqueda por palabra clave (title o descripción)
     public function scopeSearch($query, $keyword)
     {
-        if ($keyword) {
+        if (filled($keyword)) {
             return $query->whereAny(['title', 'description'], 'like', "%{$keyword}%");
         }
 
