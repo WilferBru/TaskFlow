@@ -41,30 +41,47 @@
       <div class="grow overflow-y-auto px-6 pb-6">
 
         <!-- Filtros -->
-        <div class="mt-2">
-          <h2 class="text-lg font-bold text-gray-800 mb-3">Filtrar Tareas</h2>
+      <div class="flex justify-center gap-2 mb-3">
 
-          <button
-            class="block w-full bg-emerald-500 text-gray-200 text-center py-2 rounded-xl mb-3 hover:bg-emerald-600 hover:text-gray-200 transition"
-            popovertarget="popover-1" style="anchor-name:--anchor-1"
-          >
-            👍​ Ver tareas completadas
-          </button>
-          
-          <RouterLink
-            to="/"
-            class="block w-full bg-blue-400 text-gray-200 text-center py-2 rounded-xl mb-3 hover:bg-blue-500 hover:text-gray-200 transition"
-          >
-            ⚡ Ver tareas en proceso
-          </RouterLink>
+        <button
+          @click="showFilterModal = true"
+          class="px-3 py-2 rounded-xl border border-sky-500 text-sky-600
+                hover:bg-sky-500 hover:text-white transition text-sm cursor-pointer"
+        >
+          🎛️ Filtrar
+        </button>
+        
+        <!-- Modal para filtrar -->
+        <FilterModal 
+          :open="showFilterModal"
+          :categories="categories"
+          :states="stateTask"
+          @close="showFilterModal = false"
+          @apply="onApplyFilters"
+        />
 
-          <RouterLink
-            to="/"
-            class="block w-full bg-amber-200 text-gray-600 text-center py-2 rounded-xl hover:bg-amber-400 hover:text-gray-600 transition"
-          >
-            ⏳ Ver tareas pendientes
-          </RouterLink>
-        </div>
+        <button
+          class="px-4 py-2 rounded-xl bg-sky-600 text-white 
+                hover:bg-sky-700 transition text-sm font-medium cursor-pointer"
+        >
+          🔍 Buscar
+        </button>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-2 mb-2">
+        <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs">
+          Estado: Completado ✕
+        </span>
+      </div>
+
+      <div class="flex justify-center mt-3">
+        <button
+          class="text-xs text-gray-600 hover:text-red-500 hover:underline transition cursor-pointer"
+        >
+          Limpiar filtros y búsqueda
+        </button>
+      </div>
+
 
         <!-- RESUMEN -->
         <div class="mt-8">
@@ -111,10 +128,35 @@
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
+import FilterModal from '@/components/layout/FilterModal.vue';
+import categoryService from '@/services/categoryService';
+import stateTaskService from '@/services/stateTaskService';
 
 const summaryTaskStore = useTaskSummaryStore();
 const route = useRoute();
 const randomTip = ref<string>("");
+const showFilterModal = ref(false); // mostrar y ocultar modal
+
+const filters = ref<{
+  state: number | null
+  priority: string | null
+  category: number | null
+}>({
+  state: null,
+  priority: null,
+  category: null
+});
+
+const categories = ref<{
+    id_category: number,
+    category: string,
+}[]>([]);
+
+const stateTask = ref<{
+    id_state: number;
+    state: string;
+    level: number;
+}[]>([]);
 
 // concejo 
 const tips = [
@@ -128,9 +170,34 @@ const tips = [
   "Ten siempre en cuenta las fechas límite, especialmente en tareas de alta prioridad.",
 ];
 
-onMounted(() => {
+const onApplyFilters = (newFilters: {
+  state: number | null
+  priority: string | null
+  category: number | null
+}) => {
+  filters.value = { ...newFilters }
+  showFilterModal.value = false
+}
+
+
+onMounted( async () => {
   // resumen de las tareas
   summaryTaskStore.loadSummary();
+
+  // obtener las categorias
+    try {
+        categories.value = await categoryService.getAll();
+    } catch (error) {
+        console.error("error al obtener las categorias: ", error);
+    }
+   
+    // obtener los estados de las tareas
+    try {
+        stateTask.value = await stateTaskService.getAll();
+    } catch (error) {
+        console.error("error al obtener los estados: ", error);
+    }
+
   // Tip inicial
   randomTip.value = tips[Math.floor(Math.random() * tips.length)]!;
 
@@ -142,3 +209,4 @@ onMounted(() => {
 
 
 </script>
+
