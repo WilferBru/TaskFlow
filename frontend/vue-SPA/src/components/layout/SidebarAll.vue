@@ -29,7 +29,8 @@
             </svg>
           </div>
 
-          <input 
+          <input
+            v-model="search"
             type="text" 
             id="simple-search" 
             class="text-sm rounded-4xl w-full pl-10 p-2.5 bg-gray-300 placeholder-gray-700 text-gray-800 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent transition" 
@@ -56,6 +57,7 @@
           :open="showFilterModal"
           :categories="categories"
           :states="stateTask"
+          :clearModal="clearModalFilter"
           @close="showFilterModal = false"
           @apply="onApplyFilters"
         />
@@ -63,20 +65,25 @@
         <button
           class="px-4 py-2 rounded-xl bg-sky-600 text-white 
                 hover:bg-sky-700 transition text-sm font-medium cursor-pointer"
+          @click="onSearch"
         >
           🔍 Buscar
         </button>
       </div>
 
-      <div class="flex flex-wrap justify-center gap-2 mb-2">
-        <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-xs">
-          Estado: Completado ✕
-        </span>
-      </div>
+      <ActiveFilters
+        :bubbles="activeFilterBubbles"
+        @remove="onRemoveFilter"
+        @clear="onClearFilters"
+      />
 
-      <div class="flex justify-center mt-3">
+      <div 
+        v-if="search !== '' || activeFilterBubbles.length > 0"
+        class="flex justify-center mt-5"
+      >
         <button
           class="text-xs text-gray-600 hover:text-red-500 hover:underline transition cursor-pointer"
+          @click="onClearFilters"
         >
           Limpiar filtros y búsqueda
         </button>
@@ -121,21 +128,31 @@
 
     </div>
   </aside>
+  
 </template>
 
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useTaskSummaryStore } from '@/stores/taskSummaryStore';
 import FilterModal from '@/components/layout/FilterModal.vue';
 import categoryService from '@/services/categoryService';
 import stateTaskService from '@/services/stateTaskService';
+import { useTaskStore } from '@/stores/taskStore';
+import ActiveFilters from '@/components/layout/ActiveFilters.vue';
+import { useRouter } from 'vue-router';
 
 const summaryTaskStore = useTaskSummaryStore();
 const route = useRoute();
 const randomTip = ref<string>("");
 const showFilterModal = ref(false); // mostrar y ocultar modal
+const search = ref<string>("");
+const clearModalFilter = ref(false); // variable para vaciar el modal
+
+const router = useRouter();
+
+const taskStore = useTaskStore(); // store de los filtros y mostrar tareas
 
 const filters = ref<{
   state: number | null
@@ -170,15 +187,115 @@ const tips = [
   "Ten siempre en cuenta las fechas límite, especialmente en tareas de alta prioridad.",
 ];
 
+// guardar valores emitidos del modal
 const onApplyFilters = (newFilters: {
   state: number | null
   priority: string | null
   category: number | null
 }) => {
   filters.value = { ...newFilters }
-  showFilterModal.value = false
+  showFilterModal.value = false;
 }
 
+// agrupar filtros de busqueda
+const taskFilter = computed(() => ({
+  keyword: search.value || null,
+  state_id: filters.value.state,
+  priority: filters.value.priority,
+  category_id: filters.value.category,
+}));
+
+// mostrar filtros seleccionados
+const activeFilterBubbles = computed(() => {
+  const bubbles: { key: string; label: string }[] = []
+
+  // estado
+  if (filters.value.state !== null) {
+    const found = stateTask.value.find(
+      s => s.id_state === filters.value.state
+    )
+
+    bubbles.push({
+      key: 'state',
+      label: `${found?.state ?? ''}`,
+    })
+  }
+
+  // categoría
+  if (filters.value.category !== null) {
+    const found = categories.value.find(
+      c => c.id_category === filters.value.category
+    )
+
+    bubbles.push({
+      key: 'category',
+      label: `${found?.category ?? ''}`,
+    })
+  }
+
+  // prioridad
+  if (filters.value.priority) {
+    bubbles.push({
+      key: 'priority',
+      label: `${filters.value.priority}`,
+    })
+  }
+
+  return bubbles
+})
+
+
+// eliminar filtro individual
+const onRemoveFilter = async (key: string) => {
+  switch (key) {
+    case 'state':
+      filters.value.state = null
+      break
+
+    case 'category':
+      filters.value.category = null
+      break
+    
+    case 'priority':
+      filters.value.priority = null
+      break
+  };
+
+  await taskStore.loadTask(taskFilter.value);
+};
+
+// limpiar todos los filtros
+const onClearFilters = async () => {
+  filters.value = {
+    state: null,
+    priority: null,
+    category: null,
+  };
+
+  search.value = "";
+
+  clearModalFilter.value = true; // avisarle al modal
+
+  await taskStore.loadTask();
+
+  clearModalFilter.value = false; // devolvemos a false
+};
+
+// mostrar las tareas filtradas
+const onSearch = async () => {
+  const hasData =
+    search.value !== '' ||
+    filters.value.state !== null ||
+    filters.value.category !== null ||
+    filters.value.priority !== null
+
+  if (!hasData) return
+
+  if (route.name !== 'task') {
+    await router.push({ name: 'task' });
+  }
+  await taskStore.loadTask(taskFilter.value);
+};
 
 onMounted( async () => {
   // resumen de las tareas
@@ -206,6 +323,16 @@ onMounted( async () => {
     randomTip.value = tips[Math.floor(Math.random() * tips.length)]!;
   }, 300000);
 });
+
+// limpiar filtros si cambiamos de la vista de tarea
+watch(
+  () => route.name,
+  (newRoute) => {
+    if (newRoute !== 'task') {
+      onClearFilters();
+    }
+  },
+);
 
 
 </script>

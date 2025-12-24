@@ -1,14 +1,38 @@
 <template>
 <div class="container mx-auto px-4 py-8">
-  <div 
-    v-if="tasks.length === 0"
+  <!-- 🔎 Usuario está buscando -->
+  <div v-if="taskStore.isSearching" class="justify-center text-center py-3">
+    <p
+      v-if="tasks.length > 0"
+      class="text-xl font-semibold text-gray-700"
+    >
+      🔎 Resultado de búsqueda
+    </p>
+
+    <p
+      v-else
+      class="text-xl font-semibold text-gray-700"
+    >
+      No se encontraron resultados para tu búsqueda...
+    </p>
+  </div>
+
+  <!-- 🎉 Usuario NO está buscando y no hay tareas -->
+  <div
+    v-else-if="tasks.length === 0"
     class="flex flex-col items-center justify-center text-center py-10"
   >
-    <p class="text-xl font-semibold text-gray-700">🎉 No tienes tareas por ahora</p>
-    <p class="text-sm text-gray-500 mt-1">Crea una nueva tarea para comenzar.</p>
+    <p class="text-xl font-semibold text-gray-700">
+      🎉 No tienes tareas por ahora
+    </p>
+    <p class="text-sm text-gray-500 mt-1">
+      Crea una nueva tarea para comenzar.
+    </p>
   </div>
+
+
   <!-- Tareas -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
     <div
       v-for="t in tasks"
       :key="t.id_task"

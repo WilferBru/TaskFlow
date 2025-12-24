@@ -26,11 +26,21 @@ export const useTaskStore = defineStore('task', {
     state: () => ({
         tasks: [] as Task[],
         loading: false,
+        isSearching: false, // si existe busqeuda
     }),
 
     actions: {
         async loadTask(filters?: TaskFilters) {
             this.loading = true;
+
+            // si el usuario esta buscando ambia a true
+            this.isSearching = !!(
+                filters &&
+                (filters.category_id ||
+                    filters.state_id ||
+                    filters.priority ||
+                    filters.keyword)
+            );
 
             try {
                 const hasFilters = 

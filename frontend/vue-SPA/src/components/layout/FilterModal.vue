@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 
 const localFilters = ref({
@@ -111,11 +111,26 @@ interface StateTask {
   level: number
 }
 
-const { open, categories, states } = defineProps<{
+const props = defineProps<{
     open: boolean;
     categories: Category[];
     states: StateTask[];
+    clearModal: boolean;
 }>();
+
+// limpiar modal si lo ordena el padre
+watch(
+    () => props.clearModal,
+    (val) => {
+        if (val) {
+            localFilters.value = {
+                state: null,
+                priority: null,
+                category: null,
+            }
+        }
+    }
+);
 
 const emit = defineEmits<{
     (e: 'close'): void
