@@ -85,16 +85,11 @@ class TaskController extends Controller
                 $filterTaskRequest->priority
             );
 
-            if ($tasks->isEmpty()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'No se encontraron tareas con esos filtros.',
-                ], 404);
-            }
-
             return apiResponse::success(
                 TaskResource::collection($tasks),
-                'Tareas obtenidas correctamente',
+                $tasks->isEmpty()
+                ? 'No se encontraron tareas con esos filtros.'
+                : 'Tareas obtenidas correctamente',
                 JsonResponse::HTTP_OK
             );
         } catch (\Throwable $e) {
