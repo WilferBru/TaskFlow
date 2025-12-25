@@ -43,11 +43,11 @@
               </h2>
 
 
-            <p class="text-gray-500">
+            <p class="text-gray-500 mt-3">
               {{ authStore.user?.email }}
             </p>
 
-            <span class="badge badge-outline text-gray-600">
+            <span class="badge badge-outline text-gray-600 mt-3">
               Miembro desde {{ createdAt }}
             </span>
 
