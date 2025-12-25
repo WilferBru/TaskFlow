@@ -20,8 +20,9 @@
               <ul tabindex="-1" class="dropdown-content menu bg-gray-200 rounded-box z-1 w-52 p-2 shadow-sm">
                 <li class="px-2 py2 text-gray-700">
                   <RouterLink
-                    to=""
+                    :to="{ name: 'profile' }"
                     class="hover:bg-gray-700 hover:text-gray-200"
+                    @click="closeDropdown"
                   >
                     Perfil
                   </RouterLink>
@@ -78,7 +79,6 @@
 import SidebarAdmin from '@/components/layout/SidebarAdmin.vue';
 import SidebarAll from '@/components/layout/SidebarAll.vue';
 import { useAuthStore } from '@/stores/authStore';
-import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useToast } from "vue-toastification";
 import UserIcon from '@/components/common/icons/UserIcon.vue';
@@ -88,10 +88,12 @@ const authStore = useAuthStore();
 const router = useRouter();
 const toast = useToast();
 
-// ciclo de vida del componene
-onMounted(async () => {
-  // const user = await authStore.fetchUser();
-});
+// cerrar dropdown al precionar el boton de perfil
+const closeDropdown = (e: Event) => {
+  const target = e.currentTarget as HTMLElement | null
+  target?.blur()
+}
+
 
 // cerrar sesion
 const handleLogout = async () => {
