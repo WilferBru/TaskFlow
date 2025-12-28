@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     // ruta de usuarios
+    Route::patch('/users/{user}/role', [UserController::class, 'changeRol']);
     Route::apiResource('/users', UserController::class);
 
     // -------------------------------

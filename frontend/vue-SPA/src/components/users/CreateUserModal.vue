@@ -30,6 +30,7 @@
                     focus:border-blue-400
                     "
               :class="emptyName ? 'border-red-500 ring-2 ring-red-400' : ''"
+              :disabled="!!props.id_user"
             />
             <p 
                 v-if="emptyName" class="text-red-400 mt-2 text-sm"

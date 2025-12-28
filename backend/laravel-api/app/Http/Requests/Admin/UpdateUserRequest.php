@@ -17,14 +17,14 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'role' => 'sometimes|string|in:admin,user'
+            // 'role' => 'sometimes|string|in:admin,user'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'role' => 'El rol solo debe ser user o admin'
+            // 'role' => 'El rol solo debe ser user o admin'
         ];
     }
 }

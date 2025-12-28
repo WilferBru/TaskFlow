@@ -7,8 +7,10 @@ use App\Actions\User\GetUserAction;
 use App\Actions\User\ShowUserAction;
 use App\Actions\User\StoreUserAction;
 use App\Actions\User\UpdateUserAction;
+use App\Actions\User\UpdateUserRoleAction;
 use App\Http\Requests\Admin\CreateUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\Admin\UpdateUserRoleRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Responses\apiResponse;
 use App\Models\User;
@@ -96,6 +98,28 @@ class UserController extends Controller
         } catch (\Throwable $e) {
             return apiResponse::error(
                 'Error al actualizar el usuario',
+                $e,
+                JsonResponse::HTTP_BAD_REQUEST // 400
+            );
+        }
+    }
+    
+    public function changeRol(UpdateUserRoleRequest $request, User $user, UpdateUserRoleAction $updateRol)
+    {
+        try {
+
+            $this->authorize('changeRol', User::class);
+
+            $userData = $updateRol->execute($request->validated(), $user);
+
+            return apiResponse::success(
+                new AdminResource($userData),
+                'Rol Actualizado correctamente',
+                JsonResponse::HTTP_OK
+            );
+        } catch (\Throwable $e) {
+            return apiResponse::error(
+                'Error al actualizar el rol del usuario',
                 $e,
                 JsonResponse::HTTP_BAD_REQUEST // 400
             );
