@@ -6,11 +6,13 @@ use App\Actions\User\DeleteUserAction;
 use App\Actions\User\GetUserAction;
 use App\Actions\User\ShowUserAction;
 use App\Actions\User\StoreUserAction;
+use App\Actions\User\UpdatePswdAction;
 use App\Actions\User\UpdateUserAction;
 use App\Actions\User\UpdateUserRoleAction;
 use App\Http\Requests\Admin\CreateUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Requests\Admin\UpdateUserRoleRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Responses\apiResponse;
 use App\Models\User;
@@ -103,7 +105,7 @@ class UserController extends Controller
             );
         }
     }
-    
+
     public function changeRol(UpdateUserRoleRequest $request, User $user, UpdateUserRoleAction $updateRol)
     {
         try {
@@ -120,6 +122,28 @@ class UserController extends Controller
         } catch (\Throwable $e) {
             return apiResponse::error(
                 'Error al actualizar el rol del usuario',
+                $e,
+                JsonResponse::HTTP_BAD_REQUEST // 400
+            );
+        }
+    }
+
+    public function changePassword(ChangePasswordRequest $request, User $user, UpdatePswdAction $updatePassword)
+    {
+        try {
+
+            $this->authorize('changePassword', $user);
+
+            $changePassword = $updatePassword->execute($request->validated(), $user);
+
+            return apiResponse::success(
+                new AdminResource(($changePassword)),
+                'Contraseña actualizada correctamente',
+                JsonResponse::HTTP_OK
+            );
+        } catch (\Throwable $e) {
+            return apiResponse::error(
+                'Error al actualizar la contraseña del usuario',
                 $e,
                 JsonResponse::HTTP_BAD_REQUEST // 400
             );

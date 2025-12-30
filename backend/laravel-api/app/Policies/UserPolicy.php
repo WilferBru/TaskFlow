@@ -30,11 +30,17 @@ class UserPolicy
         // un usuario solo puede editar su perfil
         return $user->id_user === $model->id_user;
     }
-    
+
     public function changeRol(User $user): bool
     {
         // Solo el admin puede cambiar el rol
         return $user->role === 'admin';
+    }
+
+    public function changePassword(User $user, User $model): bool
+    {
+        // Solo el mismo usuario puede actualizar su contraseña
+        return $user->id_user === $model->id_user;
     }
 
     public function delete(User $user, User $model): bool
