@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // ruta de usuarios
     Route::patch('/users/{user}/role', [UserController::class, 'changeRol']);
-    Route::patch('/users/{user}/changePassword', [UserController::class, 'changePassword']);
+    Route::patch('/users/change-password', [UserController::class, 'changePassword']);
     Route::apiResource('/users', UserController::class);
 
     // -------------------------------

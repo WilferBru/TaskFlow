@@ -18,6 +18,7 @@ use App\Http\Responses\apiResponse;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 // use App\Http\Controllers\Controller;
 
@@ -128,11 +129,12 @@ class UserController extends Controller
         }
     }
 
-    public function changePassword(ChangePasswordRequest $request, User $user, UpdatePswdAction $updatePassword)
+    public function changePassword(ChangePasswordRequest $request, UpdatePswdAction $updatePassword)
     {
         try {
 
-            $this->authorize('changePassword', $user);
+            //** @var \App\Models\User $user */
+            $user = Auth::user();
 
             $changePassword = $updatePassword->execute($request->validated(), $user);
 
