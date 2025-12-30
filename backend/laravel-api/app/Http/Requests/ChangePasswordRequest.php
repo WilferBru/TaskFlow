@@ -18,4 +18,13 @@ class ChangePasswordRequest extends FormRequest
             'password'         => ['required', 'string', 'min:8', 'confirmed'], // contraseñs nuevas
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'password.required'  => 'La contraseña es obligatoria',
+            'password.confirmed' => 'Las contraseñas no coinciden',
+            'current_password'   => 'La contraseña es obligatoria',
+        ];
+    }
 }

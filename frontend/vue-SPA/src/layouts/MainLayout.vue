@@ -53,7 +53,7 @@
                 <button 
                   type="button"
                   class="btn bg-blue-500 hover:bg-blue-400" 
-                  @click="handleLogout"
+                  @click.prevent="handleLogout"
                 >
                   Salir
                 </button>

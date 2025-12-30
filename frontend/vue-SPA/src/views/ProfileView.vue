@@ -7,7 +7,10 @@
         Mi perfil
       </h1>
 
-      <button class="text-gray-600 hover:text-gray-200 btn btn-outline btn-sm">
+      <button
+        @click="showChangePassModal = true" 
+        class="text-gray-600 hover:text-gray-200 btn btn-outline btn-sm"
+      >
         Cambiar contraseña
       </button>
     </div>
@@ -54,13 +57,20 @@
 
           </div>
 
-          <!-- Modal apra actualizar -->
-           <UpdateUserModal 
+          <!-- Modal para actualizar -->
+          <UpdateUserModal 
             :open="showUpdateModal"
             :name="authStore.user?.name ?? ''"
             @close="showUpdateModal = false"
             @updateData="onUpdateData"
-           />
+          />
+
+          <!-- Modal para cambiar password -->
+          <ChangePassModal
+            :open="showChangePassModal"
+            @close="showChangePassModal = false"
+            @pass="onUpdatePass"
+          />
 
         </div>
       </div>
@@ -79,6 +89,7 @@ import { ref } from 'vue';
 import UpdateUserModal from '@/components/users/UpdateUserModal.vue';
 import userService from '@/services/userService';
 import { useToast } from "vue-toastification";
+import ChangePassModal from '@/components/users/ChangePassModal.vue';
 
 const authStore = useAuthStore();
 
@@ -86,7 +97,9 @@ const toast = useToast();
 
 const updatePayload = ref<{ name: string } | null>(null); // variable reactiva apra guardar el valor emitido del hijo
 
-const showUpdateModal = ref(false);
+const showUpdateModal = ref(false); // abrir modal de actaulizar
+
+const showChangePassModal = ref(false); // mostrar modal de cambiar contraseña
 
 const createdAt = authStore.user?.created_at
   ? new Date(authStore.user.created_at).toLocaleDateString('es-CO', {
@@ -96,6 +109,7 @@ const createdAt = authStore.user?.created_at
     })
   : '';
 
+// actaulizar usuario
 const onUpdateData = async (data: {name: string}) => {
   if (!authStore.user?.id_user) return;
   try {
@@ -110,6 +124,19 @@ const onUpdateData = async (data: {name: string}) => {
   
 };
 
-
+// cambiar contraseña
+const onUpdatePass = async (passwords: { current_password: string, password: string, password_confirmation: string, } ) => {
+  try {
+    await userService.changePassword(passwords);
+    showChangePassModal.value = false;
+    toast.success("contraseña actualizada, por favor incia sesion con tu nueva contraseña");
+    setTimeout(() => authStore.logout(), 800);
+  } catch (error: any) {
+    console.error('Error al actauliuzar la contraseña: ', error);
+    toast.error(error.response?.data?.message ?? "Error al cambiar la contraseña, verifique los datos");
+    showChangePassModal.value = false;
+    return;
+  }
+}
 
 </script>

@@ -2,7 +2,7 @@
     <dialog ref="modalRef" class="modal">
         <div class="bg-gray-100 modal-box">
             <h3 class="text-gray-700 text-lg font-bold">Actualizar nombre</h3>
-            <input type="text" class="bg-gray-50 text-gray-700 input mt-5 input-info " v-model="nameInput" placeholder="Type here" />
+            <input type="text" class="bg-gray-50 text-gray-700 input mt-5 input-info " v-model="nameInput" placeholder="Nombre" />
             <div class="modal-action">
             <div class="flex justify-between w-full">
                 <button class="btn" @click.prevent="emit('close')">Close</button>

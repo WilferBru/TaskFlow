@@ -50,6 +50,21 @@ export default {
         }
     },
     
+    async changePassword( 
+        data: { 
+            current_password: string, 
+            password: string, 
+            password_confirmation: string, 
+    }) {
+        try {
+            const response = await api.patch(`/users/change-password`, data);
+            return response.data;
+        } catch (error: any) {
+            console.log("Eror al actualizar el usario", error.response?.data);
+            throw error;
+        }
+    },
+    
     async delete(id_user: number) {
         try {
             const response = await api.delete(`/users/${id_user}`);
