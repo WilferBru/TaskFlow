@@ -208,7 +208,7 @@ const validaEmail = ref(false);
 
 interface userData {
      id_user?: number;
-     name: string;
+     name?: string;
      email?: string;
      role: string;
      password?: string;
@@ -252,14 +252,12 @@ const emit = defineEmits<{
 
 const emitUser = () => {
     if (props.id_user) {
-        // si hay id editamos y validmaos solo 2 campos
-        emptyName.value = !userName.value.trim();
+        // si hay id editamos
         emptyRole.value = !userRole.value.trim();
         if (emptyName.value || emptyRole.value) return;
 
         emit("userForm", {
           id_user: props.id_user,
-          name: userName.value,
           role: userRole.value,
         });
     } else {

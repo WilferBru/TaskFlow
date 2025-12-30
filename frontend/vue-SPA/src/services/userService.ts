@@ -30,9 +30,19 @@ export default {
         }
     },
     
-    async update(data: UserData) {
+    async update(idUser: number, data: { name: string }) {
         try {
-            const response = await api.put(`/users/${data.id_user}`, data);
+            const response = await api.put(`/users/${idUser}`, data);
+            return response.data;
+        } catch (error: any) {
+            console.log("Eror al actualizar el usario", error.response?.data);
+            throw error;
+        }
+    },
+    
+    async updateRol(idUser: number, data: { role: string }) {
+        try {
+            const response = await api.patch(`/users/${idUser}/role`, data);
             return response.data;
         } catch (error: any) {
             console.log("Eror al actualizar el usario", error.response?.data);

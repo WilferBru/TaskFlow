@@ -31,6 +31,7 @@
 
              <h2 class="flex justify-center text-gray-800 text-xl font-semibold leading-none">
                 <button
+                  @click="showUpdateModal = true"
                   class="flex items-center gap-2 p-0.5 rounded cursor-pointer"
                   title="Editar perfil"
                 >
@@ -53,6 +54,13 @@
 
           </div>
 
+          <!-- Modal apra actualizar -->
+           <UpdateUserModal 
+            :open="showUpdateModal"
+            :name="authStore.user?.name ?? ''"
+            @close="showUpdateModal = false"
+            @updateData="onUpdateData"
+           />
 
         </div>
       </div>
@@ -67,8 +75,18 @@
 import { useAuthStore } from '@/stores/authStore';
 import profile from '@/assets/imgs/profile.png'
 import EditIcon from '@/components/common/icons/EditIcon.vue';
+import { ref } from 'vue';
+import UpdateUserModal from '@/components/users/UpdateUserModal.vue';
+import userService from '@/services/userService';
+import { useToast } from "vue-toastification";
 
 const authStore = useAuthStore();
+
+const toast = useToast();
+
+const updatePayload = ref<{ name: string } | null>(null); // variable reactiva apra guardar el valor emitido del hijo
+
+const showUpdateModal = ref(false);
 
 const createdAt = authStore.user?.created_at
   ? new Date(authStore.user.created_at).toLocaleDateString('es-CO', {
@@ -76,7 +94,21 @@ const createdAt = authStore.user?.created_at
       month: 'long',
       day: 'numeric',
     })
-  : ''
+  : '';
+
+const onUpdateData = async (data: {name: string}) => {
+  if (!authStore.user?.id_user) return;
+  try {
+    updatePayload.value = { ...data };
+    await userService.update(authStore.user.id_user, updatePayload.value);
+    authStore.user.name = data.name;
+    showUpdateModal.value = false;
+    toast.success("Nombre de usuario actualizado correctamente!!");
+  } catch (error) {
+    console.error('Error al actauliuzar el nombre: ', error);
+  }
+  
+};
 
 
 

@@ -177,7 +177,6 @@
 </template>
 
 <script setup lang="ts">
-import PrevNext from '@/components/users/PrevNext.vue';
 import userService from '@/services/userService';
 import { onMounted, ref, computed } from 'vue';
 import { useToast } from "vue-toastification";
@@ -194,7 +193,7 @@ const searchRole = ref(""); // variable para filtrar por rol en la tabla
 
 interface userData {
      id_user?: number;
-     name: string;
+     name?: string;
      email?: string;
      role: string;
      password?: string;
@@ -264,7 +263,7 @@ const openEditModal = (us: any) => {
 const saveUser = async (data: userData) => {
     try {
         if (data.id_user) {
-            const response = await userService.update(data);
+            const response = await userService.updateRol(data.id_user, data);
             toast.success("Usuario actualizado correctamente");
             // actualizar solo la categoria editada
             const index = users.value.findIndex(
