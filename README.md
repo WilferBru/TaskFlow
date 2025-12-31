@@ -1,33 +1,68 @@
-# TaskFlow en Desarrollo (rama dev)
+# TaskFlow - Fase de Testing (rama dev)
 
-TaskFlow es una aplicación de gestión de tareas construida con **Laravel 12** como backend y **Vue.js** como frontend.  
-La idea principal de este proyecto es poner a prueba los conocimientos; la idea final es desarrollarla, documentarla y subirla a la nube. De momento esta en fase de desarrollo por lo que se recomienda usar la rama dev.
+TaskFlow es una aplicación de gestión de tareas construida con **Laravel 12** como backend y **Vue 3** como frontend.
+
+Este proyecto fue desarrollado como una aplicación completa, aplicando buenas prácticas, separación de responsabilidades y flujos reales de una aplicación SPA moderna.  
+Actualmente se encuentra en **fase de testing**, donde se están validando los flujos de autenticación, roles, gestión de tareas y filtros avanzados antes de su despliegue en producción.
+
+Para revisar los cambios en curso y pruebas activas, se recomienda usar la rama **dev**. La rama **main** contendrá la versión estable lista para producción.
+
 
 ---
 
-## Características actuales
+## 🚀 Características actuales
 
-- Autenticación de usuarios con **Sanctum**
-- Lógica de los controladores para las acciones de los usuarios (registrarse, login, crear tareas, ver, filtrar, etc.)
-- Filtrar tareas por:
-  - Categorías
+- Autenticación de usuarios con **Laravel Sanctum**
+  - Registro
+  - Inicio y cierre de sesión
+  - Cambio de contraseña
+- Gestión de tareas (CRUD)
+- Filtros avanzados de tareas por:
+  - Categoría
   - Estado
+  - Prioridad
   - Palabra clave en título o descripción
-- Manejo de herramientas de Laravel como **Request**, **Resource**, **Scope** y rutas **API**
-- Implementacion de policy para permisos y manejos de rol y acciones para separar la logica solo
-  para el controaldor user
-- Impĺemnataciond e accion para el controlador Task, para separar logica
-- Implementar policy para los controladores Task, StateTask y Category
+- Sistema de roles y permisos (**Admin / User**)
+- Autorización mediante **Policies**
+- Separación de la lógica de negocio utilizando **Actions**
+- Uso de herramientas nativas de Laravel:
+  - Form Requests
+  - API Resources
+  - Scopes
+  - Rutas API
+- Policies implementadas para:
+  - Usuarios
+  - Tareas
+  - Estados de tarea
+  - Categorías
+
 
 ---
 
-## Tecnologías
+## 🛠️ Tecnologías
 
-- **Backend:** Laravel 12, PHP 8.2 (detalles en `~/TaskFlow/backend/laravel-api/Dockerfile`)
-- **Frontend:** Vue.js (detalles en `~/TaskFlow/frontend/vue-SPA/Dockerfile`)
-- **Base de datos:** PostgreSQL (detalle de conexión en `docker-compose.yml`)
-- **Autenticación:** Laravel Sanctum
-- **Host:** Docker Compose
+### Backend
+- **Laravel 12**
+- **PHP 8.2**
+- API REST
+- Laravel Sanctum (autenticación)
+- Policies, Form Requests y Resources
+
+### Frontend
+- **Vue 3**
+- **TypeScript**
+- **Vite**
+- **Pinia**
+- **Vue Router**
+- **Axios**
+- TailwindCSS + DaisyUI
+
+### Base de datos
+- **PostgreSQL**
+
+### Infraestructura
+- **Docker**
+- **Docker Compose**
 
 ---
 
@@ -40,15 +75,13 @@ git clone https://github.com/WilferBru/TaskFlow.git
 cd TaskFlow
 ```
 
-Tenga en cuenta que al clonar el repositorio debe listar las ramas de este mismo y seleccionar la rama donde va
-a trabajar. La rama main contiene la versión estable y lista para producción, mientras que la rama dev
-es para desarrollo y pruebas.
+Al clonar el repositorio, es importante seleccionar la rama adecuada. La rama main contiene la versión estable y lista para producción, mientras que la rama dev es para desarrollo y pruebas.
 
 ```bash
 git branch -r
 ```
 
-y seleccionar la rama en la que quiere trabajar(dev o main)
+Selecciona la rama en la que deseas trabajar (`dev` o `main`).
 
 ```bash
 git switch dev
@@ -63,21 +96,21 @@ Crea los archivos .env necesarios para la conexión entre el frontend, el backen
 Crea un archivo .env en la raíz del proyecto basándote en el archivo de ejemplo:
 
 ```bash
-~/TaskFlow/.env.example
+cp .env.example .env
 ```
 #### Archivo del backend (Laravel API)
 
 Crea un archivo .env en el backend para configurar la conexión con la base de datos:
 
 ```bash
-~/TaskFlow/backend/laravel-api/.env.example
+cp .env.example .env
 ```
 #### Archivo del frontend (Vue SPA)
 
 Crea un archivo .env en el frontend para definir la URL base desde donde se consumirá la API y realizar las peticiones HTTP:
 
 ```bash
-~/TaskFlow/frontend/vue-SPA/.env.example
+cp .env.example .env
 ```
 
 3. **levantar contenedores**
@@ -144,8 +177,6 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 ---
 
 ## Próximos pasos
-
-- Mejorar la interfaz de Vue.js para mostrar tareas y filtros.
 
 - Añadir pruebas unitarias y de integración.
 

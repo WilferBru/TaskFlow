@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import authService from "@/services/authService";
+import router from "@/router";
 
 interface User {
   id_user: number;
@@ -97,7 +98,7 @@ export const useAuthStore = defineStore("auth", {
                     localStorage.removeItem("user");
 
                     // Redirige y desmonta todo (evita los errores 401)
-                    window.location.href = "/login";
+                    await router.push({ name: 'login' });
                 }else {
                     console.error("⚠️ El backend respondió pero no confirmó el cierre:", response);
                 }

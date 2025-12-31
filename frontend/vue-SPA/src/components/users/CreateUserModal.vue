@@ -9,11 +9,10 @@
         class="text-gray-800 font-medium"
       >
         Solo puedes actualizar el 
-        nombre( no hacer sin concentimiento del suario) y el 
         rol (ten en cuenta que le daras beneficios de adminitrador 
         a el usuario si lo cambias a admin).
       </p>
-      <form method="dialog" class="space-y-4">
+      <form method="dialog" class="space-y-4 mt-5">
         <!-- Inputs en una fila -->
         <div class="grid grid-cols-12 gap-4">
           <div class="col-span-6">
