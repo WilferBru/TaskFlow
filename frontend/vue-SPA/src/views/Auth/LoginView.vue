@@ -82,7 +82,7 @@ const handleLogin = async () => {
         return;
     }
     try {
-        const response = await authStore.login(email.value, password.value);
+        await authStore.login(email.value, password.value);
 
         if (authStore.token) {
             toast.success("Bienvenido");
