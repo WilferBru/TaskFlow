@@ -1,33 +1,45 @@
-# vue-SPA
+<p align="center">
+  <img src="https://vuejs.org/images/logo.png" width="120" alt="Vue Logo">
+</p>
 
-This template should help get you started developing with Vue 3 in Vite.
+<h1 align="center">TaskFlow Frontend (Vue + TypeScript)</h1>
 
-## Recommended IDE Setup
+## En desarrollo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Este módulo corresponde al **frontend** del proyecto **TaskFlow**, una aplicación de gestión de tareas con autenticación, roles y control de permisos.  
+Actualmente se encuentra **en desarrollo activo**, integrando la API construida en Laravel y ejecutándose dentro de contenedores **Docker**.
 
-## Type Support for `.vue` Imports in TS
+## Tecnologías principales
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- **Framework:** Vue 3
+- **Lenguaje:** TypeScript
+- **Módulo HTTP:** Axios
+- **Enrutamiento:** Vue Router
+- **Estado global:** Pinia (planeado)
+- **Estilos:** TailwindCSS
+- **Backend:** Laravel 12 (API REST)
+- **Contenedores:** Docker + Docker Compose
+- **Puerto expuesto:** 5173
 
-## Customize configuration
+## Estado actual
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- Configuración inicial de Vue + TypeScript
+- Autenticacion mediante axios y pinia
+- Módulos planeados:
+  - Autenticación (login / registro / token) -> Echo ✅
+  - Panel de tareas
+  - Filtros por estado y categoría
+  - Gestión de usuarios y roles
 
-## Project Setup
+## 🐳 Ejecución con Docker
+
+Este frontend se ejecuta como parte del entorno Docker Compose del proyecto **TaskFlow**.  
+Para levantar el servicio completo (backend + frontend + base de datos), simplemente usa:
 
 ```sh
-npm install
+docker compose up -d --build
 ```
 
-### Compile and Hot-Reload for Development
+### Url del frontend disponible en
 
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
+[localhost:5173/](http://localhost:5173/)
