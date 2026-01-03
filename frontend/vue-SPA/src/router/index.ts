@@ -14,6 +14,9 @@ import ProfileView from "@/views/ProfileView.vue";
 import LoginView from '@/views/Auth/LoginView.vue';
 import RegisterView from '@/views/Auth/RegisterView.vue';
 
+// 404
+import NotFoundView from '@/views/NotFoundView.vue';
+
 /**
  * Admin
  */
@@ -114,7 +117,15 @@ const router = createRouter({
       name: 'register',
       component: RegisterView,
       meta: { requiresGuest: true },
+    },
+
+    // 404
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: NotFoundView,
     }
+
   ],
 })
 
