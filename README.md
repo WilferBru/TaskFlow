@@ -1,12 +1,6 @@
-# TaskFlow - Fase de Testing (rama dev)
+# TaskFlow — Full Stack Task Management App (Laravel + Vue 3)
 
-TaskFlow es una aplicación de gestión de tareas construida con **Laravel 12** como backend y **Vue 3** como frontend.
-
-Este proyecto fue desarrollado como una aplicación completa, aplicando buenas prácticas, separación de responsabilidades y flujos reales de una aplicación SPA moderna.  
-Actualmente se encuentra en **fase de testing**, donde se están validando los flujos de autenticación, roles, gestión de tareas y filtros avanzados antes de su despliegue en producción.
-
-Para revisar los cambios en curso y pruebas activas, se recomienda usar la rama **dev**. La rama **main** contendrá la versión estable lista para producción.
-
+Proyecto full stack con autenticación, roles, políticas de autorización, testing crítico y arquitectura limpia.
 
 ---
 
@@ -36,12 +30,32 @@ Para revisar los cambios en curso y pruebas activas, se recomienda usar la rama 
   - Estados de tarea
   - Categorías
 
+---
+
+## 🧪 Testing
+
+El proyecto incluye pruebas enfocadas en **flujos críticos**, siguiendo un enfoque realista y profesional.
+
+### Backend (Laravel)
+
+- Feature tests para autenticación:
+  - Login
+  - Logout
+  - Rutas protegidas con Sanctum
+
+### Frontend (Vue 3)
+
+- Test del flujo de inicio de sesión
+- Test del guard global de rutas (autenticación / rutas protegidas)
+
+> El objetivo del testing no es cubrir el 100%, sino asegurar la estabilidad de los flujos esenciales de la aplicación.
 
 ---
 
 ## 🛠️ Tecnologías
 
 ### Backend
+
 - **Laravel 12**
 - **PHP 8.2**
 - API REST
@@ -49,6 +63,7 @@ Para revisar los cambios en curso y pruebas activas, se recomienda usar la rama 
 - Policies, Form Requests y Resources
 
 ### Frontend
+
 - **Vue 3**
 - **TypeScript**
 - **Vite**
@@ -58,11 +73,32 @@ Para revisar los cambios en curso y pruebas activas, se recomienda usar la rama 
 - TailwindCSS + DaisyUI
 
 ### Base de datos
+
 - **PostgreSQL**
 
 ### Infraestructura
+
 - **Docker**
 - **Docker Compose**
+
+---
+
+## 🧠 Arquitectura
+
+TaskFlow aplica principios de **separación de responsabilidades**, especialmente en el backend:
+
+- Controllers delgados
+- Lógica de negocio en Actions
+- Autorización con Policies
+- Validación con Form Requests
+- Respuestas consistentes con API Resources
+
+El frontend sigue una estructura modular basada en:
+
+- Vistas
+- Stores (Pinia)
+- Servicios HTTP
+- Rutas protegidas
 
 ---
 
@@ -98,6 +134,7 @@ Crea un archivo .env en la raíz del proyecto basándote en el archivo de ejempl
 ```bash
 cp .env.example .env
 ```
+
 #### Archivo del backend (Laravel API)
 
 Crea un archivo .env en el backend para configurar la conexión con la base de datos:
@@ -105,6 +142,7 @@ Crea un archivo .env en el backend para configurar la conexión con la base de d
 ```bash
 cp .env.example .env
 ```
+
 #### Archivo del frontend (Vue SPA)
 
 Crea un archivo .env en el frontend para definir la URL base desde donde se consumirá la API y realizar las peticiones HTTP:
@@ -113,7 +151,7 @@ Crea un archivo .env en el frontend para definir la URL base desde donde se cons
 cp .env.example .env
 ```
 
-3. **levantar contenedores**
+3. **Levantar contenedores**
 
 dentro de la carpeta TaskFlow ejecutar:
 
@@ -129,7 +167,7 @@ dentro de carpeta TaskFlow ejecutar:
 docker compose exec api php artisan migrate --seed
 ```
 
-5. **Puede acceder a al app**
+5. **Puedes acceder a al app**
 
 Puedes acceder a la app y probar la api, por defecto crea un seeder de usuario admin
 con los datos
@@ -178,13 +216,11 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
 ## Próximos pasos
 
-- Añadir pruebas unitarias y de integración.
+- Subir la imagen de producción a Dockerhub.
 
-- Subir la imagen de produccion a Dockerhub.
+- Implementar Nginx en las imágenes de build
 
-- Implementar Nginx en las imagens build
-
-- Implementar Github Actions
+- Implementar GitHub Actions
 
 - Desplegar en AWS
 
