@@ -102,6 +102,23 @@ El frontend sigue una estructura modular basada en:
 
 ---
 
+## 🌿 Estrategia de ramas
+
+Este repositorio utiliza una separación de ramas para organizar el desarrollo y el despliegue:
+
+- **`dev`**  
+  Rama de desarrollo activo y pruebas locales.
+
+- **`main`**  
+  Rama estable con código listo para producción.
+
+- **`deploy`**  
+  Rama destinada a **pruebas de despliegue**, configuración de infraestructura, Docker,
+  GitHub Actions y flujos de CI/CD.
+
+La rama `deploy` permite validar procesos de construcción y despliegue sin afectar el
+desarrollo ni la versión estable del proyecto.
+
 ## Instalación
 
 1. **Clonar el repositorio:**
@@ -117,10 +134,10 @@ Al clonar el repositorio, es importante seleccionar la rama adecuada. La rama ma
 git branch -r
 ```
 
-Selecciona la rama en la que deseas trabajar (`dev` o `main`).
+Selecciona la rama en la que deseas trabajar (`dev`, `main` o `deploy`).
 
 ```bash
-git switch dev
+git switch deploy
 ```
 
 2. **Configuracion de archivos .env**
@@ -151,20 +168,29 @@ Crea un archivo .env en el frontend para definir la URL base desde donde se cons
 cp .env.example .env
 ```
 
+> ⚠️ **Importante**
+> En producción Docker, el frontend debe apuntar directamente al backend.
+>
+> Ejemplo:
+>
+> ```env
+> VITE_API_URL=http://localhost:8000/api
+> ```
+
 3. **Levantar contenedores**
 
 dentro de la carpeta TaskFlow ejecutar:
 
 ```bash
-docker compose up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-4. **Ejecuta migraciones**
+4. **Ejecuta migraciones (Produccion)**
 
 dentro de carpeta TaskFlow ejecutar:
 
 ```bash
-docker compose exec api php artisan migrate --seed
+docker compose -f docker-compose.prod.yml exec api php artisan migrate --seed --force
 ```
 
 5. **Puedes acceder a al app**
@@ -179,7 +205,7 @@ password: prueba123
 
 ```bash
 # frontend
-http://localhost:5173/
+http://localhost:4173/
 ```
 
 ```bash
@@ -216,13 +242,9 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
 ## Próximos pasos
 
-- Subir la imagen de producción a Dockerhub.
-
-- Implementar Nginx en las imágenes de build
-
-- Implementar GitHub Actions
-
-- Desplegar en AWS
+- Publicar imágenes de producción en DockerHub.
+- Implementar CI/CD con GitHub Actions para build y push automáticos.
+- Desplegar en un VPS con dominio y HTTPS (Let’s Encrypt).
 
 ---
 
