@@ -2,6 +2,11 @@
 
 Proyecto full stack con autenticación, roles, políticas de autorización, testing crítico y arquitectura limpia.
 
+> ✅ **Estado del proyecto**
+>
+> La rama **`main`** contiene la versión **estable y lista para producción** de la aplicación.
+> Puede ser desplegada directamente en un servidor utilizando Docker.
+
 ---
 
 ## 🚀 Características actuales
@@ -102,23 +107,6 @@ El frontend sigue una estructura modular basada en:
 
 ---
 
-## 🌿 Estrategia de ramas
-
-Este repositorio utiliza una separación de ramas para organizar el desarrollo y el despliegue:
-
-- **`dev`**  
-  Rama de desarrollo activo y pruebas locales.
-
-- **`main`**  
-  Rama estable con código listo para producción.
-
-- **`deploy`**  
-  Rama destinada a **pruebas de despliegue**, configuración de infraestructura, Docker,
-  GitHub Actions y flujos de CI/CD.
-
-La rama `deploy` permite validar procesos de construcción y despliegue sin afectar el
-desarrollo ni la versión estable del proyecto.
-
 ## Instalación
 
 1. **Clonar el repositorio:**
@@ -137,7 +125,7 @@ git branch -r
 Selecciona la rama en la que deseas trabajar (`dev`, `main` o `deploy`).
 
 ```bash
-git switch deploy
+git switch main
 ```
 
 2. **Configuracion de archivos .env**
