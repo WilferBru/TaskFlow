@@ -1,26 +1,35 @@
-# Imagen base de php con FPM
-FROM php:8.2-fpm
+# ===============================
+# Build
+# ===============================
+FROM composer:2.7.7 AS builder
 
-# Instalar herramientas necesarias y extensiones de PHP
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    git \
-    unzip \
-    curl \
-    libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip
-
-# Instalar composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Directorio de trabajo
-WORKDIR /var/www/html
-
-# Copiar todo el proyecto primero
+WORKDIR /app
 COPY . .
 
-# Instalar dependencias sin scripts para evitar errores con artisan
-RUN composer install --no-scripts --no-interaction
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
 
-# Comando por defecto al levantar el contenedor
+# ===============================
+# Runtime
+# ===============================
+FROM php:8.3-cli
+
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libzip-dev \
+    unzip \
+    && docker-php-ext-install pdo pdo_pgsql zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /var/www/html
+COPY --from=builder /app /var/www/html
+
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+EXPOSE 8000
+
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
