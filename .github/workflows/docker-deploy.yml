@@ -28,7 +28,12 @@ jobs:
           cd frontend/vue-SPA
           npm install
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      
       - name: Ejecutar test del frontend
         run: |
           cd frontend/vue-SPA
-          npm run test --if-present
+          npm run test:unit
