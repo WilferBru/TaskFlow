@@ -1,0 +1,6 @@
+name: Construir y subir imágenes Docker (Deploy)
+
+on:
+  push:
+    branches:
+      - deploy
