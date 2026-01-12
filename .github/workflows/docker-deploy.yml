@@ -12,9 +12,32 @@ jobs:
       - name: Descargar el codigo del repositorio
         uses: actions/checkout@v4
 
-      - name: Ejecutar test del backend
+      - name: Configurar php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: pdo, sqlite
+          coverage: none
+
+      - name: Instalar dependencias del backend
         run: |
-          docker compose -f docker-compose.prod.yml run --rm api php artisan test
+          cd backend/laravel-api
+          composer install --no-interaction --prefer-dist
+
+      - name: Preparar entorno de testing
+        run: |
+          cd backend/laravel-api
+          php artisan key:generate --env=testing
+
+      - name: Ejecutar migraciones
+        run: |
+          cd backend/laravel-api
+          php artisan migrate --env=testing
+
+      - name: Ejecutar tests del backend
+        run: |
+          cd backend/laravel-api
+          php artisan test
 
   tests-frontend:
     runs-on: ubuntu-latest
@@ -32,7 +55,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      
+
       - name: Ejecutar test del frontend
         run: |
           cd frontend/vue-SPA
