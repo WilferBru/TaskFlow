@@ -5,17 +5,6 @@ on:
     branches:
       - deploy
 
-  workflow_dispatch:
-    inputs:
-      image_tag:
-        description: "Tag de la imagen Docker"
-        required: true
-        default: "lab"
-        type: choice
-        options:
-          - lab
-          - prod
-
 jobs:
   tests-backend:
     runs-on: ubuntu-latest
@@ -92,8 +81,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Construir y subir imagen BACKEND (lab)
-        if: github.event.inputs.image_tag != 'prod'
+      - name: Construir y subir imagen BACKEND (latest)
         uses: docker/build-push-action@v5
         with:
           context: ./backend/laravel-api
@@ -101,24 +89,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            wilferbru/taskflow-backend:lab
-            wilferbru/taskflow-backend:lab-${{ github.sha }}
-
-      - name: Construir y subir imagen BACKEND (prod + latest)
-        if: github.event.inputs.image_tag == 'prod'
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend/laravel-api
-          file: ./backend/laravel-api/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            wilferbru/taskflow-backend:prod
-            wilferbru/taskflow-backend:prod-${{ github.sha }}
             wilferbru/taskflow-backend:latest
 
-      - name: Construir y subir imagen FRONTEND (lab)
-        if: github.event.inputs.image_tag != 'prod'
+      - name: Construir y subir imagen FRONTEND (latest)
         uses: docker/build-push-action@v5
         with:
           context: ./frontend/vue-SPA
@@ -126,18 +99,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            wilferbru/taskflow-frontend:lab
-            wilferbru/taskflow-frontend:lab-${{ github.sha }}
-
-      - name: Construir y subir imagen FRONTEND (prod + latest)
-        if: github.event.inputs.image_tag == 'prod'
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend/vue-SPA
-          file: ./frontend/vue-SPA/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            wilferbru/taskflow-frontend:prod
-            wilferbru/taskflow-frontend:prod-${{ github.sha }}
             wilferbru/taskflow-frontend:latest
