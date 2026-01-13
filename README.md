@@ -57,7 +57,7 @@ El proyecto incluye pruebas enfocadas en **flujos críticos**, siguiendo un enfo
 ### Backend
 
 - **Laravel 12**
-- **PHP 8.2**
+- **PHP 8.3**
 - API REST
 - Laravel Sanctum (autenticación)
 - Policies, Form Requests y Resources
@@ -240,11 +240,21 @@ Para conocer cómo configurar y ejecutar la parte del frontend, visita:
 
 ---
 
-## Próximos pasos
+## Estado del proyecto
 
-- Publicar imágenes de producción en DockerHub.
-- Implementar CI/CD con GitHub Actions para build y push automáticos.
-- Desplegar en un VPS con dominio y HTTPS (Let’s Encrypt).
+TaskFlow se encuentra en una **versión estable y funcional**, con:
+
+- Backend y frontend dockerizados
+- Imágenes versionadas publicadas en DockerHub
+- CI con tests de backend y frontend
+- Build y push automático de imágenes mediante GitHub Actions
+- Arquitectura limpia y documentada
+
+El proyecto está listo para:
+
+- uso en producción
+- despliegue en VPS
+- presentación como proyecto de portafolio profesional
 
 ---
 
