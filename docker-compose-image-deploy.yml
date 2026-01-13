@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:16
+    container_name: taskflow-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - taskflow
+
+  api:
+    image: wilferbru/taskflow-backend:latest
+    container_name: taskflow-api
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    networks:
+      - taskflow
+
+  frontend:
+    image: wilferbru/taskflow-frontend:latest 
+    container_name: taskflow-frontend
+    restart: always
+    ports:
+      - "4173:4173"
+    depends_on:
+      - api
+    networks:
+      - taskflow
+
+volumes:
+  pgdata:
+
+networks:
+  taskflow:
+    driver: bridge
