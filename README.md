@@ -1,59 +1,57 @@
 # TaskFlow — Full Stack Task Management App (Laravel + Vue 3)
 
-Proyecto full stack con autenticación, roles, políticas de autorización, testing crítico y arquitectura limpia.
+TaskFlow es una aplicación full stack de gestión de tareas diseñada con enfoque en **arquitectura limpia**, **seguridad**, **testing de flujos críticos** y **despliegue profesional con Docker**.
 
 > ✅ **Estado del proyecto**
 >
-> La rama **`main`** contiene la versión **estable y lista para producción** de la aplicación.
-> Puede ser desplegada directamente en un servidor utilizando Docker.
+> La rama **`main`** contiene la versión **estable y lista para producción**.
+> Puede ejecutarse directamente utilizando imágenes oficiales publicadas en DockerHub.
 
 ---
 
-## 🚀 Características actuales
+## 🚀 Características principales
 
-- Autenticación de usuarios con **Laravel Sanctum**
+- Autenticación segura con **Laravel Sanctum**
   - Registro
   - Inicio y cierre de sesión
   - Cambio de contraseña
-- Gestión de tareas (CRUD)
-- Filtros avanzados de tareas por:
+- Gestión completa de tareas (CRUD)
+- Filtros avanzados por:
   - Categoría
   - Estado
   - Prioridad
-  - Palabra clave en título o descripción
+  - Palabra clave
 - Sistema de roles y permisos (**Admin / User**)
 - Autorización mediante **Policies**
-- Separación de la lógica de negocio utilizando **Actions**
-- Uso de herramientas nativas de Laravel:
-  - Form Requests
-  - API Resources
-  - Scopes
-  - Rutas API
-- Policies implementadas para:
-  - Usuarios
-  - Tareas
-  - Estados de tarea
-  - Categorías
+- Backend con separación clara de responsabilidades:
+  - Controllers delgados
+  - Lógica de negocio en Actions
+  - Validación con Form Requests
+  - Respuestas con API Resources
+- Frontend moderno con:
+  - Rutas protegidas
+  - Estado global con Pinia
+  - Servicios HTTP desacoplados
 
 ---
 
 ## 🧪 Testing
 
-El proyecto incluye pruebas enfocadas en **flujos críticos**, siguiendo un enfoque realista y profesional.
+El proyecto incluye pruebas enfocadas en **flujos críticos**, siguiendo un enfoque realista orientado a estabilidad.
 
-### Backend (Laravel)
+### Backend
 
-- Feature tests para autenticación:
+- Feature tests de autenticación:
   - Login
   - Logout
   - Rutas protegidas con Sanctum
 
-### Frontend (Vue 3)
+### Frontend
 
 - Test del flujo de inicio de sesión
-- Test del guard global de rutas (autenticación / rutas protegidas)
+- Test del guard global de rutas protegidas
 
-> El objetivo del testing no es cubrir el 100%, sino asegurar la estabilidad de los flujos esenciales de la aplicación.
+> El objetivo del testing es garantizar la estabilidad de los flujos esenciales, no la cobertura total.
 
 ---
 
@@ -61,178 +59,141 @@ El proyecto incluye pruebas enfocadas en **flujos críticos**, siguiendo un enfo
 
 ### Backend
 
-- **Laravel 12**
-- **PHP 8.2**
+- Laravel 12
+- PHP 8.3
 - API REST
-- Laravel Sanctum (autenticación)
-- Policies, Form Requests y Resources
+- Sanctum
+- Policies, Actions, Form Requests, API Resources
 
 ### Frontend
 
-- **Vue 3**
-- **TypeScript**
-- **Vite**
-- **Pinia**
-- **Vue Router**
-- **Axios**
+- Vue 3
+- TypeScript
+- Vite
+- Pinia
+- Vue Router
+- Axios
 - TailwindCSS + DaisyUI
 
 ### Base de datos
 
-- **PostgreSQL**
+- PostgreSQL
 
 ### Infraestructura
 
-- **Docker**
-- **Docker Compose**
+- Docker
+- Docker Compose
 
 ---
 
 ## 🧠 Arquitectura
 
-TaskFlow aplica principios de **separación de responsabilidades**, especialmente en el backend:
+TaskFlow aplica principios de **separación de responsabilidades** y **arquitectura limpia**:
+
+### Backend
 
 - Controllers delgados
-- Lógica de negocio en Actions
-- Autorización con Policies
-- Validación con Form Requests
-- Respuestas consistentes con API Resources
+- Lógica de negocio aislada en Actions
+- Autorización centralizada con Policies
+- Validación consistente con Form Requests
+- Respuestas normalizadas con API Resources
 
-El frontend sigue una estructura modular basada en:
+### Frontend
 
-- Vistas
-- Stores (Pinia)
-- Servicios HTTP
-- Rutas protegidas
+- Arquitectura modular
+- Separación de vistas, stores y servicios
+- Guards de rutas para control de acceso
+- Manejo de estado global con Pinia
 
 ---
 
-## Instalación
+## 🌿 Estrategia de ramas
 
-1. **Clonar el repositorio:**
+Este repositorio utiliza una separación clara de responsabilidades por ramas:
+
+- **`main`**  
+  Versión estable y lista para producción.  
+  Consume imágenes oficiales desde DockerHub.
+
+- **`deploy`**  
+  Contiene CI/CD, Dockerfiles y workflows de GitHub Actions.  
+  Responsable de construir y publicar imágenes.
+
+- **`dev`**  
+  Rama de desarrollo activo.  
+  Incluye configuración local, tooling y documentación técnica detallada.
+
+---
+
+## 🚀 Despliegue en producción
+
+### Requisitos
+
+- Docker
+- Docker Compose
+
+### Ejecución
+
+1. Clonar el repositorio y entrar al proyecto:
 
 ```bash
 git clone https://github.com/WilferBru/TaskFlow.git
 cd TaskFlow
-```
-
-Al clonar el repositorio, es importante seleccionar la rama adecuada. La rama main contiene la versión estable y lista para producción, mientras que la rama dev es para desarrollo y pruebas.
-
-```bash
-git branch -r
-```
-
-Selecciona la rama en la que deseas trabajar (`dev`, `main` o `deploy`).
-
-```bash
 git switch main
 ```
 
-2. **Configuracion de archivos .env**
-
-Crea los archivos .env necesarios para la conexión entre el frontend, el backend y la base de datos.
-
-#### Archivo principal del proyecto
-
-Crea un archivo .env en la raíz del proyecto basándote en el archivo de ejemplo:
+### Crear el archivo de entorno:
 
 ```bash
 cp .env.example .env
 ```
 
-#### Archivo del backend (Laravel API)
-
-Crea un archivo .env en el backend para configurar la conexión con la base de datos:
+### Levantar aplicacion
 
 ```bash
-cp .env.example .env
+docker compose -f docker-compose.prod.yml up -d
+
 ```
 
-#### Archivo del frontend (Vue SPA)
-
-Crea un archivo .env en el frontend para definir la URL base desde donde se consumirá la API y realizar las peticiones HTTP:
-
-```bash
-cp .env.example .env
-```
-
-> ⚠️ **Importante**
-> En producción Docker, el frontend debe apuntar directamente al backend.
->
-> Ejemplo:
->
-> ```env
-> VITE_API_URL=http://localhost:8000/api
-> ```
-
-3. **Levantar contenedores**
-
-dentro de la carpeta TaskFlow ejecutar:
-
-```bash
-docker compose -f docker-compose.prod.yml up -d --build
-```
-
-4. **Ejecuta migraciones (Produccion)**
-
-dentro de carpeta TaskFlow ejecutar:
+### Ejecutar migraciones y seeder (producción):
 
 ```bash
 docker compose -f docker-compose.prod.yml exec api php artisan migrate --seed --force
+
 ```
 
-5. **Puedes acceder a al app**
+### Inicialización de la base de datos
 
-Puedes acceder a la app y probar la api, por defecto crea un seeder de usuario admin
-con los datos
+La primera ejecución incluye seeders de inicialización que crean
+los roles base y un usuario administrador inicial necesario
+para la administración del sistema.
 
-```bash
-email: prueba@prueba.com
-password: prueba123
-```
-
-```bash
-# frontend
-http://localhost:4173/
-```
-
-```bash
-# backend
-http://localhost:8000/api/
-```
-
-Pero tambien puede registrarse como usuario en register
+Este paso debe ejecutarse una sola vez al desplegar la aplicación.
 
 ---
 
-## Documentación de la API (Backend)
+## 📚 Documentación adicional:
 
-Toda la información sobre los endpoints, autenticación y roles de usuario se encuentra en el archivo:
+La documentación técnica detallada se encuentra en las ramas correspondientes:
+
+### Back-end
 
 [backend/laravel-api/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/backend/laravel-api/README.md)
 
-Ahí encontrarás:
-
-- Cómo registrar y autenticar usuarios
-- Qué rutas están disponibles
-- Qué permisos tiene cada rol (admin y user)
-- Ejemplos de peticiones y respuestas JSON
-
----
-
-## Documentación del Frontend
-
-Para conocer cómo configurar y ejecutar la parte del frontend, visita:
+### Front-end
 
 [frontend/vue-SPA/README.md](https://github.com/WilferBru/TaskFlow/blob/dev/frontend/vue-SPA/README.md)
 
 ---
 
-## Próximos pasos
+## 📦 Docker Images
 
-- Publicar imágenes de producción en DockerHub.
-- Implementar CI/CD con GitHub Actions para build y push automáticos.
-- Desplegar en un VPS con dominio y HTTPS (Let’s Encrypt).
+The application is distributed using official Docker images:
+
+- Backend: https://hub.docker.com/r/wilferbru/taskflow-backend
+- Frontend: https://hub.docker.com/r/wilferbru/taskflow-frontend
+
+Images are built and published automatically via CI/CD pipelines.
 
 ---
 

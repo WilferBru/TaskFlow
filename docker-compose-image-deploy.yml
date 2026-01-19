@@ -13,7 +13,7 @@ services:
       - taskflow
 
   api:
-    build: ./backend/laravel-api
+    image: wilferbru/taskflow-backend:latest
     container_name: taskflow-api
     restart: always
     depends_on:
@@ -24,7 +24,7 @@ services:
       - taskflow
 
   frontend:
-    build: ./frontend/vue-SPA
+    image: wilferbru/taskflow-frontend:latest 
     container_name: taskflow-frontend
     restart: always
     ports:
