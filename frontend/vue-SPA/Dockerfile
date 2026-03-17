@@ -7,6 +7,8 @@ RUN npm install
 
 COPY . .
 
+RUN cp .env.production .env
+
 RUN npm run build
 
 ENV HOST=0.0.0.0
