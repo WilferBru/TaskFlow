@@ -7,6 +7,7 @@ RUN npm install
 
 COPY . .
 
+# Se copia url de la api
 RUN cp .env.production .env
 
 RUN npm run build
