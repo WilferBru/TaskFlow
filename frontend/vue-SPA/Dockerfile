@@ -7,8 +7,9 @@ RUN npm install
 
 COPY . .
 
-# Se copia url de la api
-RUN cp .env.production .env
+# Recibe la variable desde el build
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
 RUN npm run build
 
