@@ -121,6 +121,30 @@ docker exec -it taskflow-api php artisan migrate --seed --force
 
 ---
 
+## 🔐 Usuario de prueba
+
+El proyecto incluye un usuario creado mediante seeders para facilitar las pruebas:
+
+Email: prueba@prueba.com  
+Contraseña: prueba123
+
+Este usuario tiene permisos administrativos y permite acceder a todas las funcionalidades del sistema.
+
+---
+
+## 🧪 Uso como laboratorio
+
+TaskFlow puede utilizarse como entorno de pruebas:
+
+- Puedes iniciar sesión con el usuario de prueba
+- También puedes registrarte como un usuario nuevo
+
+👉 Los usuarios registrados manualmente tendrán permisos básicos (usuario estándar).
+
+Esto permite probar el sistema de roles y permisos implementado en la aplicación.
+
+---
+
 ## 🌐 Acceso
 
 - Frontend → http://localhost:4173
