@@ -1,0 +1,110 @@
+name: Construir y subir imágenes Docker (Deploy)
+
+on:
+  push:
+    branches:
+      - deploy
+
+# 👉 Cambia SOLO este valor cuando quieras una nueva versión
+env:
+  IMAGE_VERSION: "1.0.0"
+
+jobs:
+  tests-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.3
+          extensions: pdo, sqlite
+          coverage: none
+
+      - name: Instalar dependencias del backend
+        run: |
+          cd backend/laravel-api
+          composer install --no-interaction --prefer-dist
+
+      - name: Preparar entorno de testing
+        run: |
+          cd backend/laravel-api
+          php artisan key:generate --env=testing
+
+      - name: Ejecutar migraciones
+        run: |
+          cd backend/laravel-api
+          php artisan migrate --env=testing
+
+      - name: Ejecutar tests del backend
+        run: |
+          cd backend/laravel-api
+          php artisan test
+
+  tests-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependencias del frontend
+        run: |
+          cd frontend/vue-SPA
+          npm install
+
+      - name: Ejecutar tests del frontend
+        run: |
+          cd frontend/vue-SPA
+          npm run test:unit
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs:
+      - tests-backend
+      - tests-frontend
+
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login en DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Construir y subir imagen BACKEND
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/laravel-api
+          file: ./backend/laravel-api/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            wilferbru/taskflow-backend:${{ env.IMAGE_VERSION }}
+            wilferbru/taskflow-backend:latest
+
+      - name: Construir y subir imagen FRONTEND
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend/vue-SPA
+          file: ./frontend/vue-SPA/Dockerfile
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            VITE_API_URL=http://api:8000/api
+          tags: |
+            wilferbru/taskflow-frontend:${{ env.IMAGE_VERSION }}
+            wilferbru/taskflow-frontend:latest
